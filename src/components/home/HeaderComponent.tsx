@@ -1,16 +1,19 @@
-import {Layout, Menu, Dropdown, Space} from "antd";
+import { Layout, Menu, Dropdown, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import React from "react";
-import Image from 'next/image'
 import Link from 'next/link';
 import styled from '@/styles/header.module.scss';
-import {PieChartOutlined, LoginOutlined} from "@ant-design/icons";
 
 
 const { Header } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
 
+const SIGN_UP:React.Key = 'signUp';
+const LOGIN:React.Key = 'login';
+
 const HeaderComponent = () => {
+
+  const toggleLogin: boolean = false;
 
     function getItem(
         label: React.ReactNode,
@@ -20,48 +23,41 @@ const HeaderComponent = () => {
         type?: 'group',
     ): MenuItem {
         return {
-            key,
-            icon,
-            children,
-            label,
-            type,
+          label,
+          key,
+          icon,
+          children,
+          type,
         } as MenuItem;
     }
 
     const items:MenuItem[] = [
-        getItem('일', '1'),
-        getItem('이', '2'),
-        getItem('삼', '3'),
+        getItem(
+          '회원가입',
+          SIGN_UP,
+        ),
+        getItem(
+          <Link href="/" >a</Link>,
+          LOGIN,
+        ),
     ];
 
-    const itemsTest:Array<String> = ['one', 'two', 'three'];
+    const signUp = () => {
+
+    }
 
     return (
-        <Layout>
-            <Header className={styled.header}>
-                <div
-                    style={{
-                        float: 'left',
-                        width: 120,
-                        height: 31,
-                        margin: '16px 24px 16px 0',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                    }}
-                />
-                <Menu
-                    style={{float: "right"}}
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    items={
-                        itemsTest.map((name, index) => ({
-                        key: String(index),
-                        label: `asdf ${name}`,
-                    }))}
-                    // items={items}
-                />
-            </Header>
-        </Layout>
+      <header className={styled.header}>
+        <div className={styled.logo}/>
+        <div className={styled.headerRight}>
+          <div>
+            <Link href="/" className={styled.headerFont} onClick={signUp}>회원가입</Link>
+          </div>
+          <div>
+            <Link href="/" className={styled.headerFont} onClick={signUp}>로그인</Link>
+          </div>
+        </div>
+      </header>
     )
 }
 
