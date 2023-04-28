@@ -3,7 +3,7 @@ import type { MenuProps } from 'antd';
 import React from "react";
 import Link from 'next/link';
 import styled from '@/styles/header.module.scss';
-
+import AppLayout from '@/components/layout/AppLayout';
 
 const { Header } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -51,10 +51,10 @@ const HeaderComponent = () => {
         <div className={styled.logo}/>
         <div className={styled.headerRight}>
           <div>
-            <Link href="/" className={styled.headerFont} onClick={signUp}>회원가입</Link>
+            <Link href="/signup" className={styled.headerFont} onClick={signUp}>회원가입</Link>
           </div>
           <div>
-            <Link href="/" className={styled.headerFont} onClick={signUp}>로그인</Link>
+            <Link href="/login" className={styled.headerFont} onClick={signUp}>로그인</Link>
           </div>
         </div>
       </header>

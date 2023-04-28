@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Black_Ops_One, Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css'
-import HeaderComponent from "@/components/home/HeaderComponent";
+import HeaderComponent from "@/components/layout/HeaderComponent";
 import { Col, Row } from 'antd';
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -16,7 +16,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-          <AppLayout />
+        <AppLayout>
+          <h1>asdf</h1>
+        </AppLayout>
       </main>
     </>
   )
