@@ -5,7 +5,13 @@ const SignUpComponent = () => {
   return (
     <>
       <AppLayout>
-        <h1>회원가입</h1>
+        <div>
+          <input type="text" placeholder="아이디"/>
+          <button>중복확인</button>
+          <input type="password" placeholder="비밀번호"/>
+          <input type="password" placeholder="비밀번호 확인"/>
+          <button>회원가입</button>
+        </div>
       </AppLayout>
     </>
   );

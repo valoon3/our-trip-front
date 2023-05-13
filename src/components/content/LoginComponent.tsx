@@ -1,12 +1,15 @@
 import AppLayout from '@/components/layout/AppLayout';
 
-const LoginComponent = (e: any) => {
-  console.log(e);
+const LoginComponent = () => {
 
   return (
     <>
       <AppLayout>
-        <h1>로그인</h1>
+        <div>
+          <input type="text" />
+          <input type="password" />
+          <button>로그인</button>
+        </div>
       </AppLayout>
     </>
   );

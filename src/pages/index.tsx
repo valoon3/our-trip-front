@@ -5,6 +5,7 @@ import styles from '@/styles/Home.module.css'
 import HeaderComponent from "@/components/layout/HeaderComponent";
 import { Col, Row } from 'antd';
 import AppLayout from '@/components/layout/AppLayout';
+import Map from '@/components/map/Map';
 
 export default function Home() {
   return (
@@ -17,7 +18,8 @@ export default function Home() {
       </Head>
       <main>
         <AppLayout>
-          <h1>asdf</h1>
+          {/*<h1>asdf</h1>*/}
+          <Map />
         </AppLayout>
       </main>
     </>
