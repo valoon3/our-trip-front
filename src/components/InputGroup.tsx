@@ -1,4 +1,5 @@
 import React from 'react';
+import cln from 'classnames'
 
 interface InputGroupProps {
   className?: string;
@@ -22,7 +23,9 @@ const InputGroup:React.FC<InputGroupProps> = ({
       <input
         type={type}
         style={{ minWidth: 300 }}
-        className="w-full p-3 transition duration-200 border border-gray-400 rounded bg-gray-50 focus:bg-white hover:bg-white"
+        className={cln(`w-full p-3 transition duration-200 border border-gray-400 rounded bg-gray-50 focus:bg-white hover:bg-white`, {
+          'border-red-500': error
+        })}
         placeholder={placeholder}
         value={value}
         onChange={e => setValue(e.target.value)}
