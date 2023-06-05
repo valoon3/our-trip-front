@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import InputGroup from '@/components/InputGroup';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Register = () => {
 
@@ -9,6 +11,27 @@ const Register = () => {
   const [username, setUserName] = useState("");
 
   const [errors, setErrors] = useState<any>({});
+
+  let router = useRouter();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post('/api/user/signup', {
+        email,
+        password,
+        username
+      })
+
+      console.log(res);
+
+      await router.push('/login');
+    } catch(err: any) {
+      console.log(err);
+      setErrors(err.response.data || {});
+    }
+  }
 
   return (
     <div>
