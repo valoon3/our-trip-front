@@ -6,9 +6,9 @@ import * as process from 'process';
 export default function App({ Component, pageProps }: AppProps) {
 
   if(process.env.NODE_ENV === 'development') {
-    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_DEV;
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_DEV + '/api';
   } else if(process.env.NODE_ENV === 'production') {
-    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_PRO;
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_PRO + '/api';
   } else if(process.env.NODE_ENV === 'test') {
 
   }
