@@ -18,15 +18,19 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/user/signup', {
+      const { data } = await axios.post('/user/signup', {
         email,
         password,
         username
       })
 
-      console.log(res);
+      console.log(data.emailError);
 
-      await router.push('/login');
+      if(data.emailError) {
+        setErrors(data);
+      } else {
+        await router.push('/login');
+      }
     } catch(err: any) {
       console.log(err);
       setErrors(err.response.data || {});
@@ -44,19 +48,19 @@ const Register = () => {
                 placeholder={"Email"}
                 value={email}
                 setValue={setEmail}
-                error={errors.email}
+                error={errors.emailError}
               />
               <InputGroup
                 placeholder={"Password"}
                 value={password}
                 setValue={setPassword}
-                error={errors.password}
+                error={errors.passwordError}
               />
               <InputGroup
                 placeholder={"Username"}
                 value={username}
                 setValue={setUserName}
-                error={errors.username}
+                error={errors.usernameError}
               />
               <button className="w-full py-2 mb-1 text-xs font-bold text-white uppercase bg-gray-400 border border-gray-400 rounded">
                 회원가입
