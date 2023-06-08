@@ -1,6 +1,7 @@
 import AppLayout from '@/components/layout/AppLayout';
 import axios from 'axios';
 
+// TODO : 사용하지 않는 경우 삭제하기
 const LoginComponent = () => {
 
   const userInfo = { userEmail: 'asdf', password: '1234', name: '나병호' };
