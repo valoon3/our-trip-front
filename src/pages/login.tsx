@@ -14,14 +14,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<any>({});
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    axios.post('/user/login', {
+    try {
+      await axios.post('/user/login', {
+        email,
+        password,
+      }, {
+        withCredentials: true
+      });
+    } catch(err) {
+      console.error(err);
+      setErrors(errors.response.data);
+    }
 
-    }, {
-      withCredentials: true
-    });
+
 
   }
 
