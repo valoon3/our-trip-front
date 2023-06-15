@@ -18,15 +18,21 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      await axios.post('/user/login', {
+      let response = await axios.post('/user/signin', {
         email,
         password,
-      }, {
-        withCredentials: true
-      });
+      },
+        // {
+        // withCredentials: true
+        // }
+      );
+
+      localStorage.setItem('token', response.data.access_token);
+
+      console.log(response.data.access_token);
     } catch(err) {
       console.error(err);
-      setErrors(errors.response.data);
+      // setErrors(errors.response.data);
     }
 
 
