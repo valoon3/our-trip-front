@@ -29,7 +29,9 @@ const Login = () => {
 
       localStorage.setItem('token', response.data.access_token);
 
-      console.log(response.data.access_token);
+      console.log('token : ' + localStorage.getItem('token'));
+
+      await router.push('/');
     } catch(err) {
       console.error(err);
       // setErrors(errors.response.data);
