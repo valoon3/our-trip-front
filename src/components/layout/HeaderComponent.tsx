@@ -42,19 +42,15 @@ const HeaderComponent = () => {
         ),
     ];
 
-    const signUp = () => {
-
-    }
-
     return (
       <header className={styled.header}>
-        <div className={styled.logo}/>
+        <div className={styled.logo}>로고</div>
         <div className={styled.headerRight}>
           <div>
-            <Link href="/signup" className={styled.headerFont} onClick={signUp}>회원가입</Link>
+            <Link href="/register" className={styled.headerFont}>회원가입</Link>
           </div>
           <div>
-            <Link href="/login" className={styled.headerFont} onClick={signUp}>로그인</Link>
+            <Link href="/login" className={styled.headerFont}>로그인</Link>
           </div>
         </div>
       </header>
