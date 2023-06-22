@@ -1,18 +1,18 @@
 import HeaderComponent from '@/components/layout/HeaderComponent';
 import React from 'react';
+import Map from '@/components/map/Map';
 
 type Props = {
-  // children: React.ReactChild;
-  children: React.ReactElement
-}
+  // children: React.ReactElement
+};
 
-const Layout = ({ children }: Props) => {
+const Layout = () => {
   return (
     <>
       <HeaderComponent />
-      {children}
+      <Map />
     </>
-  )
-}
+  );
+};
 
 export default Layout;

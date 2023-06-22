@@ -1,11 +1,6 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Black_Ops_One, Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css'
-import HeaderComponent from "@/components/layout/HeaderComponent";
-import { Col, Row } from 'antd';
+import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
 import AppLayout from '@/components/layout/AppLayout';
-import Map from '@/components/map/Map';
 
 export default function Home() {
   return (
@@ -17,16 +12,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        <h1 className="text-3xl font-bold underline">
-          Hello World
-        </h1>
+        <h1 className="text-3xl font-bold underline">Hello World</h1>
       </div>
       <main>
-        <AppLayout>
-          {/*<h1>asdf</h1>*/}
-          <Map />
-        </AppLayout>
+        <AppLayout />
       </main>
     </>
-  )
+  );
 }
