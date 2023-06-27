@@ -6,15 +6,13 @@ const HeaderComponent = () => {
   const toggleLogin: boolean = false;
 
   return (
-    <header className={styled.header}>
-      <div className={styled.logo}>로고</div>
-      <div className={styled.headerRight}>
-        <Link href="/register" className={styled.headerFont}>
-          회원가입
-        </Link>
-        <Link href="/login" className={styled.headerFont}>
-          로그인
-        </Link>
+    <header>
+      <div className={styled.header}>
+        <div className={styled.logo}>로고</div>
+        <div className={styled.headerRight}>
+          <Link href="/register">회원가입</Link>
+          <Link href="/login">로그인</Link>
+        </div>
       </div>
     </header>
   );
