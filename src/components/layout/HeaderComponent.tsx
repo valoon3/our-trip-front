@@ -8,7 +8,10 @@ const HeaderComponent = () => {
   return (
     <header>
       <div className={styled.header}>
-        <div className={styled.logo}>로고</div>
+        {/*<div className={styled.logo}>로고</div>*/}
+        <Link href="/" className={styled.logo}>
+          로고
+        </Link>
         <div className={styled.headerRight}>
           <Link href="/register">회원가입</Link>
           <Link href="/login">로그인</Link>
