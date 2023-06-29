@@ -1,27 +1,29 @@
-import LoginComponent from '@/components/content/LoginComponent';
 import InputGroup from '@/components/InputGroup';
 import Link from 'next/link';
-import React, { FormEvent } from 'react';
-import { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-
 
 const Login = () => {
   let router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
+
+  // 로그인 설정 나중에는 리덕스나 svg 교체하고 삭제하자
+  const [toggleLogin, setToggleLogin] = useState<boolean>(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     try {
-      let response = await axios.post('/user/signin', {
-        email,
-        password,
-      },
+      let response = await axios.post(
+        '/user/signin',
+        {
+          email,
+          password,
+        }
         // {
         // withCredentials: true
         // }
@@ -31,15 +33,13 @@ const Login = () => {
 
       console.log('token : ' + localStorage.getItem('token'));
 
+      setToggleLogin(true);
       await router.push('/');
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       // setErrors(errors.response.data);
     }
-
-
-
-  }
+  };
 
   return (
     <div>
@@ -49,13 +49,13 @@ const Login = () => {
             <h1 className="mb-2 text-lg font-medium">로그인</h1>
             <form onSubmit={handleSubmit}>
               <InputGroup
-                placeholder={"Email"}
+                placeholder={'Email'}
                 value={email}
                 setValue={setEmail}
                 error={errors.emailError}
               />
               <InputGroup
-                placeholder={"Password"}
+                placeholder={'Password'}
                 value={password}
                 setValue={setPassword}
                 error={errors.passwordError}
@@ -74,8 +74,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-
-}
+  );
+};
 
 export default Login;
