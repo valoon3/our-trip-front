@@ -23,12 +23,13 @@ const Login = () => {
         {
           email,
           password,
+        },
+        {
+          withCredentials: true,
         }
-        // {
-        // withCredentials: true
-        // }
       );
 
+      // console.log(cookieStore.get('token'));
       localStorage.setItem('token', response.data.access_token);
 
       console.log('token : ' + localStorage.getItem('token'));
