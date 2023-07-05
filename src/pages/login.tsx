@@ -3,6 +3,8 @@ import Link from 'next/link';
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '@/app/reduce/userSlice';
 
 const Login = () => {
   let router = useRouter();
@@ -11,8 +13,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
 
-  // 로그인 설정 나중에는 리덕스나 svg 교체하고 삭제하자
-  const [toggleLogin, setToggleLogin] = useState<boolean>(false);
+  const loginToggle = useSelector((state: any) => state.user.loginToggle);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -30,11 +32,17 @@ const Login = () => {
       );
 
       // console.log(cookieStore.get('token'));
-      localStorage.setItem('token', response.data.access_token);
+      // localStorage.setItem('token', response.data.access_token);
+      //
+      // console.log('token : ' + localStorage.getItem('token'));
 
-      console.log('token : ' + localStorage.getItem('token'));
+      // setToggleLogin(true);
 
-      setToggleLogin(true);
+      console.log(loginToggle);
+      console.log('로그인');
+      dispatch(login());
+      console.log(loginToggle);
+
       await router.push('/');
     } catch (err) {
       console.error(err);

@@ -2,6 +2,8 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import axios from 'axios';
 import * as process from 'process';
+import { Provider } from 'react-redux';
+import { store } from '@/app/store';
 
 export default function App({ Component, pageProps }: AppProps) {
   if (process.env.NODE_ENV === 'development') {
@@ -11,5 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
   } else if (process.env.NODE_ENV === 'test') {
   }
 
-  return <Component {...pageProps} />;
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />)
+    </Provider>
+  );
 }
