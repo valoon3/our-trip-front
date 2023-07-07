@@ -31,16 +31,9 @@ const Login = () => {
         }
       );
 
-      // console.log(cookieStore.get('token'));
-      // localStorage.setItem('token', response.data.access_token);
-      //
-      // console.log('token : ' + localStorage.getItem('token'));
-
-      // setToggleLogin(true);
-
       console.log(loginToggle);
       console.log('로그인');
-      dispatch(login());
+      dispatch(login({ name: response.data, email: response.data }));
       console.log(loginToggle);
 
       await router.push('/');

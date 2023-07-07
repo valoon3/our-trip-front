@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserInfoType } from '@/types/UserInfo.type';
 
 interface UserState {
   loginToggle: boolean;
@@ -11,8 +12,9 @@ const initialState: UserState = {
 };
 
 const reducers = {
-  login: (state: UserState) => {
+  login: (state: UserState, action: PayloadAction<UserInfoType>) => {
     state.loginToggle = true;
+    state.userInfo = action.payload;
   },
   logout: (state: UserState) => {
     state.loginToggle = false;

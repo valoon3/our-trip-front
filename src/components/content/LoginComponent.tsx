@@ -8,6 +8,7 @@ import { logout } from '@/app/reduce/userSlice';
 
 const LoginComponent = () => {
   const loginToggle = useSelector((state: RootState) => state.user.loginToggle);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
 
   const logoutAction = () => {
@@ -16,7 +17,7 @@ const LoginComponent = () => {
   };
 
   const userInfoAction = () => {
-    console.log('회원정보');
+    console.log('회원정보 : ', userInfo);
   };
 
   return (
