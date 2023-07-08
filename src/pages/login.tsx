@@ -13,7 +13,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
 
-  const loginToggle = useSelector((state: any) => state.user.loginToggle);
+  const test = useSelector((state: any) => state.user);
+  const { loginToggle, userInfo } = test;
   const dispatch = useDispatch();
 
   const handleSubmit = async (event: FormEvent) => {
@@ -33,7 +34,7 @@ const Login = () => {
 
       console.log(loginToggle);
       console.log('로그인');
-      dispatch(login({ name: response.data, email: response.data }));
+      dispatch(login({ name: 'test', email: 'asdf@asdf.com' }));
       console.log(loginToggle);
 
       await router.push('/');

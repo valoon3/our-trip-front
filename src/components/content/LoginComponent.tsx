@@ -13,7 +13,7 @@ const LoginComponent = () => {
 
   const logoutAction = () => {
     console.log('로그아웃');
-    dispatch(logout);
+    dispatch(logout());
   };
 
   const userInfoAction = () => {
