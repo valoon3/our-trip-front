@@ -12,10 +12,17 @@ const initialState: UserState = {
 
 const reducers = {
   login: (state: UserState, action: PayloadAction<any>) => {
-    return { ...state, loginToggle: true, userInfo: action.payload };
+    return {
+      ...state,
+      loginToggle: true,
+      userInfo: action.payload,
+    };
   },
   logout: (state: UserState) => {
-    return { ...state, loginToggle: false };
+    return {
+      ...state,
+      loginToggle: false,
+    };
   },
 };
 

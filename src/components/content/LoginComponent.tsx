@@ -5,6 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { logout } from '@/app/reduce/userSlice';
+import { getCookie } from 'cookies-next';
 
 const LoginComponent = () => {
   const loginToggle = useSelector((state: RootState) => state.user.loginToggle);
@@ -13,6 +14,7 @@ const LoginComponent = () => {
 
   const logoutAction = () => {
     console.log('로그아웃');
+    console.log(getCookie('token'));
     dispatch(logout());
   };
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '@/app/reduce/userSlice';
+import { hasCookie } from 'cookies-next';
 
 const Login = () => {
   let router = useRouter();
@@ -32,10 +33,11 @@ const Login = () => {
         }
       );
 
-      console.log(loginToggle);
+      console.log(response);
+      console.log(hasCookie('token'));
+
       console.log('로그인');
       dispatch(login({ name: 'test', email: 'asdf@asdf.com' }));
-      console.log(loginToggle);
 
       await router.push('/');
     } catch (err) {
