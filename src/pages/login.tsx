@@ -34,6 +34,8 @@ const Login = () => {
         }
       );
 
+      axios.defaults.withCredentials = true;
+
       console.log(response.headers);
       console.log(getCookie('token'));
 
