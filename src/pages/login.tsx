@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '@/app/reduce/userSlice';
-import { hasCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next';
+import { Response } from 'next/dist/compiled/@edge-runtime/primitives/fetch';
 
 const Login = () => {
   let router = useRouter();
@@ -22,7 +23,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      let response = await axios.post(
+      let response: Response = await axios.post(
         '/user/signin',
         {
           email,
@@ -33,8 +34,10 @@ const Login = () => {
         }
       );
 
-      console.log(response);
-      console.log(hasCookie('token'));
+      console.log(response.headers);
+      console.log(getCookie('token'));
+
+      await axios.post('/user/test');
 
       console.log('로그인');
       dispatch(login({ name: 'test', email: 'asdf@asdf.com' }));
