@@ -1,16 +1,28 @@
 // TODO : 사용하지 않는 경우 삭제하기
 import styled from '@/styles/header.module.scss';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { logout } from '@/app/reduce/userSlice';
+import { login, logout, setUserInfo } from '@/app/reduce/userSlice';
 import { getCookie } from 'cookies-next';
+import axios from 'axios';
 
 const LoginComponent = () => {
   const loginToggle = useSelector((state: RootState) => state.user.loginToggle);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('컴포넌트가 화면에 나타남');
+
+    (async function fetchAndSetUser() {
+      const res = await axios.post('/user/info');
+      console.log('로그인 정보', res.data);
+      dispatch(login());
+      dispatch(setUserInfo(res.data));
+    })();
+  }, []);
 
   const logoutAction = () => {
     console.log('로그아웃');

@@ -13,6 +13,8 @@ export default function App({ Component, pageProps }: AppProps) {
   } else if (process.env.NODE_ENV === 'test') {
   }
 
+  axios.defaults.withCredentials = true;
+
   return (
     <Provider store={store}>
       <Component {...pageProps} />)
