@@ -13,7 +13,7 @@
 
   z-index: 100;
   //pointer-events: none;
-  
+
   //top: 0;
   //left: 0;
   //
@@ -43,13 +43,20 @@
     float: right;
     display: flex;
     justify-content: right;
-
+    color: white;
+    
     a {
       background-color: #003b95;
-      //border: 1px solid red;
       border-radius: 25px;
       margin-right: 5px;
-      padding: 1px 2px;
+      padding: 1px 8px;
+    }
+
+    button {
+      background-color: #003b95;
+      border-radius: 25px;
+      margin-right: 5px;
+      padding: 1px 8px;
     }
   }
 }
