@@ -22,19 +22,13 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      let response: Response = await axios.post(
-        '/user/signin',
-        {
-          email,
-          password,
-        }
-        // {
-        //   withCredentials: true,
-        // }
-      );
+      let response: Response = await axios.post('/user/signin', {
+        email,
+        password,
+      });
 
       console.log('로그인');
-      dispatch(login({ name: 'test', email: 'asdf@asdf.com' }));
+      dispatch(login());
 
       await router.push('/');
     } catch (err) {

@@ -22,7 +22,7 @@ const LoginComponent = () => {
       dispatch(login());
       dispatch(setUserInfo(res.data));
     })();
-  }, []);
+  }, [loginToggle]);
 
   const logoutAction = () => {
     console.log('로그아웃');
