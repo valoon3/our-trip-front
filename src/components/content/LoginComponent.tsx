@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { login, logout, setUserInfo } from '@/app/reduce/userSlice';
-import { getCookie } from 'cookies-next';
 import axios from 'axios';
 
 const LoginComponent = () => {
@@ -17,16 +16,23 @@ const LoginComponent = () => {
     console.log('컴포넌트가 화면에 나타남');
 
     (async function fetchAndSetUser() {
-      const res = await axios.post('/user/info');
-      console.log('로그인 정보', res.data);
-      dispatch(login());
-      dispatch(setUserInfo(res.data));
+      try {
+        const res = await axios.post('/user/info', '', {
+          withCredentials: true,
+        });
+        console.log('로그인 정보', res.data);
+        dispatch(login());
+        dispatch(setUserInfo(res.data));
+      } catch (err) {
+        console.log('로그인이 확인되지 않았습니다.');
+      }
     })();
   }, [loginToggle]);
 
-  const logoutAction = () => {
+  const logoutAction = async () => {
     console.log('로그아웃');
-    console.log(getCookie('token'));
+    await axios.post('/user/logout');
+
     dispatch(logout());
   };
 
