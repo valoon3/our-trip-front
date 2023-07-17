@@ -22,9 +22,12 @@ const reducers = {
       loginToggle: true,
     };
   },
-  logout: (state: UserState) => {
+  logout: () => {
     return {
-      ...state,
+      userInfo: {
+        name: '',
+        email: '',
+      },
       loginToggle: false,
     };
   },
