@@ -27,6 +27,7 @@ const reducers = {
     state.email = '';
   },
   setUserInfo: (state: UserState, action: PayloadAction<UserInfo>) => {
+    state.loginToggle = true;
     state.name = action.payload.name;
     state.email = action.payload.email;
   },

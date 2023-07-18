@@ -28,6 +28,7 @@ const Login = () => {
 
       if (!res.data.loginError) {
         console.log('로그인');
+        localStorage.setItem('loginInfo', 'true');
         dispatch(login());
         return await router.push('/');
       }

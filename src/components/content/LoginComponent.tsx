@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { login, logout, setUserInfo } from '@/app/reduce/userSlice';
+import { logout, setUserInfo } from '@/app/reduce/userSlice';
 import axios from 'axios';
 
 const LoginComponent = () => {
@@ -14,28 +14,27 @@ const LoginComponent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (localStorage.getItem('loginInfo') !== 'true') return;
+
     console.log('로그인 정보 확인');
 
-    if (loginToggle && name === '' && email === '') {
-      (async function fetchAndSetUser() {
-        try {
-          const res = await axios.post('/user/info', '', {
-            withCredentials: true,
-          });
-          console.log('로그인 정보', res.data);
-          dispatch(login());
-          dispatch(setUserInfo({ name: res.data.name, email: res.data.email }));
-        } catch (err) {
-          console.log('로그인이 확인되지 않았습니다.');
-        }
-      })();
-    }
+    (async function fetchAndSetUser() {
+      try {
+        const res = await axios.post('/user/info', '', {
+          withCredentials: true,
+        });
+        dispatch(setUserInfo({ name: res.data.name, email: res.data.email }));
+      } catch (err) {
+        console.log('로그인이 확인되지 않았습니다.');
+      }
+    })();
   }, [loginToggle]);
 
   const logoutAction = async () => {
     console.log('로그아웃');
     await axios.post('/user/logout');
 
+    localStorage.removeItem('loginInfo');
     dispatch(logout());
   };
 
