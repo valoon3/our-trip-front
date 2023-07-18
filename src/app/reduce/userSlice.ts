@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
   loginToggle: boolean;
-  userInfo: UserInfo;
+  name: string;
+  email: string;
 }
 
 interface UserInfo {
@@ -12,33 +13,22 @@ interface UserInfo {
 
 const initialState: UserState = {
   loginToggle: false,
-  userInfo: { name: '', email: '' },
+  name: '',
+  email: '',
 };
 
 const reducers = {
   login: (state: UserState) => {
-    return {
-      ...state,
-      loginToggle: true,
-    };
+    state.loginToggle = true;
   },
-  logout: () => {
-    return {
-      userInfo: {
-        name: '',
-        email: '',
-      },
-      loginToggle: false,
-    };
+  logout: (state: UserState) => {
+    state.loginToggle = false;
+    state.name = '';
+    state.email = '';
   },
   setUserInfo: (state: UserState, action: PayloadAction<UserInfo>) => {
-    return {
-      ...state,
-      userInfo: {
-        name: action.payload.name,
-        email: action.payload.email,
-      },
-    };
+    state.name = action.payload.name;
+    state.email = action.payload.email;
   },
 };
 

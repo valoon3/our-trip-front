@@ -1,14 +1,13 @@
-import React, { useState, FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import InputGroup from '@/components/InputGroup';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
 const Register = () => {
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUserName] = useState('');
 
   const [errors, setErrors] = useState<any>({});
 
@@ -21,21 +20,21 @@ const Register = () => {
       const { data } = await axios.post('/user/signup', {
         email,
         password,
-        username
-      })
+        name: username,
+      });
 
       console.log(data.emailError);
 
-      if(data.emailError) {
+      if (data.emailError) {
         setErrors(data);
       } else {
         await router.push('/login');
       }
-    } catch(err: any) {
+    } catch (err: any) {
       console.log(err);
       setErrors(err.response.data || {});
     }
-  }
+  };
 
   return (
     <div>
@@ -45,19 +44,19 @@ const Register = () => {
             <h1 className="mb-2 text-lg font-medium">회원가입</h1>
             <form onSubmit={handleSubmit}>
               <InputGroup
-                placeholder={"Email"}
+                placeholder={'Email'}
                 value={email}
                 setValue={setEmail}
                 error={errors.emailError}
               />
               <InputGroup
-                placeholder={"Password"}
+                placeholder={'Password'}
                 value={password}
                 setValue={setPassword}
                 error={errors.passwordError}
               />
               <InputGroup
-                placeholder={"Username"}
+                placeholder={'name'}
                 value={username}
                 setValue={setUserName}
                 error={errors.usernameError}
@@ -76,7 +75,7 @@ const Register = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Register;

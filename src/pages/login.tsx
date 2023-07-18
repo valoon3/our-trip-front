@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '@/app/reduce/userSlice';
-import { Response } from 'next/dist/compiled/@edge-runtime/primitives/fetch';
 
 const Login = () => {
   let router = useRouter();
@@ -22,15 +21,18 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      let response: Response = await axios.post('/user/signin', {
+      let res = await axios.post('/user/signin', {
         email,
         password,
       });
 
-      console.log('로그인');
-      dispatch(login());
+      if (!res.data.loginError) {
+        console.log('로그인');
+        dispatch(login());
+        return await router.push('/');
+      }
 
-      await router.push('/');
+      setErrors({ emailError: res.data.errorMessage });
     } catch (err) {
       console.error(err);
       // setErrors(errors.response.data);

@@ -8,16 +8,15 @@ import { login, logout, setUserInfo } from '@/app/reduce/userSlice';
 import axios from 'axios';
 
 const LoginComponent = () => {
-  const loginToggle: boolean = useSelector(
-    (state: RootState) => state.user.loginToggle
+  const { loginToggle, name, email } = useSelector(
+    (state: RootState) => state.user
   );
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('컴포넌트가 화면에 나타남');
+    console.log('로그인 정보 확인');
 
-    if (loginToggle) {
+    if (loginToggle && name === '' && email === '') {
       (async function fetchAndSetUser() {
         try {
           const res = await axios.post('/user/info', '', {
@@ -25,7 +24,7 @@ const LoginComponent = () => {
           });
           console.log('로그인 정보', res.data);
           dispatch(login());
-          dispatch(setUserInfo(res.data));
+          dispatch(setUserInfo({ name: res.data.name, email: res.data.email }));
         } catch (err) {
           console.log('로그인이 확인되지 않았습니다.');
         }
@@ -41,7 +40,7 @@ const LoginComponent = () => {
   };
 
   const userInfoAction = () => {
-    console.log('회원정보 : ', userInfo);
+    console.log('회원정보 : ', name, email);
   };
 
   return (
