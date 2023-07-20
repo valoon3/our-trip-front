@@ -12,7 +12,6 @@ export default function Document() {
         <title>Create Next App</title>
         <Link rel="icon" href="/favicon.ico" />
         <Link href="../styles/globals.css" rel="stylesheet" />
-        <script type="text/javascript" src={naverMapKey} async></script>
       </Head>
       <body>
         <Main />
