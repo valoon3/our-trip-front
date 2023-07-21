@@ -1,4 +1,4 @@
-import HeaderComponent from '@/components/layout/HeaderComponent';
+import HeaderLayout from '@/components/layout/HeaderLayout';
 import React from 'react';
 import MapSectionComponent from '@/components/layout/MapSectionComponent';
 
@@ -9,7 +9,7 @@ type Props = {
 const Layout = () => {
   return (
     <>
-      <HeaderComponent />
+      <HeaderLayout />
       <MapSectionComponent />
     </>
   );

@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import styled from '@/styles/header.module.scss';
-import LoginComponent from '@/components/content/LoginComponent';
+import LoginComponent from '@/components/header/LoginComponent';
+import SearchComponent from '@/components/header/SearchComponent';
 
-const HeaderComponent = () => {
+const HeaderLayout = () => {
   const toggleLogin: boolean = false;
 
   return (
@@ -13,6 +14,8 @@ const HeaderComponent = () => {
         <Link href="/" className={styled.logo}>
           로고
         </Link>
+        {/* 검색창 */}
+        <SearchComponent />
         <LoginComponent />
         {/*<div className={styled.headerRight}>*/}
         {/*  <Link href="/register">회원가입</Link>*/}
@@ -23,4 +26,4 @@ const HeaderComponent = () => {
   );
 };
 
-export default HeaderComponent;
+export default HeaderLayout;

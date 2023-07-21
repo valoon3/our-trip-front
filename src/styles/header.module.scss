@@ -39,12 +39,35 @@
     background-color: #003b95;
   }
 
+  .headerSearch {
+    float: left;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    height: 40px;
+    margin-left: 10px;
+    background-color: #fff;
+    border-radius: 50px;
+    border: solid #003b95;
+    width: 17em;
+
+    input {
+      border: none;
+      width: 100%;
+      height: 30px;
+      padding: 0 10px;
+      //background-color: transparent;
+      border-radius: 50px;
+    }
+
+  }
+
   .headerRight {
     float: right;
     display: flex;
     justify-content: right;
     color: white;
-    
+
     a {
       background-color: #003b95;
       border-radius: 25px;
