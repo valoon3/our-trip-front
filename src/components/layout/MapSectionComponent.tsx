@@ -1,7 +1,11 @@
-import Map from '@/components/map/Map';
+import KakaoMap from '@/components/map/KakaoMap';
 
 const MapSectionComponent = () => {
-  return <Map />;
+  return (
+    <div id="test" style={{ width: '2000px', height: '2000px' }}>
+      <KakaoMap />
+    </div>
+  );
 };
 
 export default MapSectionComponent;
