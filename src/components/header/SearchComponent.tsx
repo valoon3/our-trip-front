@@ -4,18 +4,47 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
+  let places: kakao.maps.services.Places;
+
+  let [kakaoMapOnload, setkakaoMapOnload] = useState(false);
+
+  let onClickSearch = () => {};
+
+  kakao.maps.load(() => {
+    setkakaoMapOnload(true);
+    places = new kakao.maps.services.Places();
+
+    onClickSearch = () => {
+      console.log(searchText);
+      places.keywordSearch(searchText, searchCallback);
+    };
+  });
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
+  const searchCallback = (
+    result: kakao.maps.services.PlacesSearchResult,
+    status: kakao.maps.services.Status
+  ) => {
+    if (status === kakao.maps.services.Status.ERROR) {
+      console.log('searchCallback Error : ', status);
+      return;
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      console.log('검색 결과가 없습니다.');
+      return;
+    }
+
+    if (result.length === 1) {
+      console.log(result);
+      return;
+    }
+  };
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onClickSearch();
-  };
-
-  const onClickSearch = () => {
-    console.log(searchText);
   };
 
   return (
@@ -26,7 +55,14 @@ const SearchComponent = () => {
         value={searchText}
         onChange={onChange}
       />
-      <AiOutlineSearch onClick={onClickSearch} style={{ cursor: 'pointer' }} />
+      {kakaoMapOnload ? (
+        <p>now loading</p>
+      ) : (
+        <AiOutlineSearch
+          onClick={onClickSearch}
+          style={{ cursor: 'pointer' }}
+        />
+      )}
     </form>
   );
 };
