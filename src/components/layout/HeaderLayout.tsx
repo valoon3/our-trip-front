@@ -5,8 +5,6 @@ import LoginComponent from '@/components/header/LoginComponent';
 import SearchComponent from '@/components/header/SearchComponent';
 
 const HeaderLayout = () => {
-  const toggleLogin: boolean = false;
-
   return (
     <header>
       <div className={styled.header}>
