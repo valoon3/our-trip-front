@@ -17,7 +17,7 @@ export default function Document() {
           strategy="beforeInteractive"
           type="text/javascript"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAPS_API_JAVASCRIPT_KEY}&libraries=services,clusterer&autoload=false`}
-          onLoad={() => console.log('kakao maps loaded')}
+          // onLoad={() => console.log('kakao maps loaded')}
         />
       </Head>
       <body>
