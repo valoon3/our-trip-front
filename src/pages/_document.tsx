@@ -19,6 +19,11 @@ export default function Document() {
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAPS_API_JAVASCRIPT_KEY}&libraries=services,clusterer&autoload=false`}
           // onLoad={() => console.log('kakao maps loaded')}
         />
+        {/*<Script*/}
+        {/*  strategy="beforeInteractive"*/}
+        {/*  type="text/javascript"*/}
+        {/*  src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMap`}*/}
+        {/*/>*/}
       </Head>
       <body>
         <Main />

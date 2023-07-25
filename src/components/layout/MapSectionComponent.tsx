@@ -1,9 +1,10 @@
-import KakaoMap from '@/components/map/KakaoMap';
+import GoogleMap from '@/components/map/GoogleMap';
 
 const MapSectionComponent = () => {
   return (
-    <div id="test" style={{ width: '2000px', height: '2000px' }}>
-      <KakaoMap />
+    <div style={{ width: '2000px', height: '2000px' }}>
+      <GoogleMap />
+      {/*<KakaoMap />*/}
     </div>
   );
 };
