@@ -41,7 +41,11 @@ export const mapSlice = createSlice({
   reducers,
 });
 
-export const { setGoogleMapLoaded, setGoogleMapUnloaded, setCoordinate } =
-  mapSlice.actions;
+export const {
+  setMapElement,
+  setGoogleMapLoaded,
+  setGoogleMapUnloaded,
+  setCoordinate,
+} = mapSlice.actions;
 
 export default mapSlice.reducer;

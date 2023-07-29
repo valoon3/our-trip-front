@@ -45,24 +45,48 @@
 //   );
 // };
 
+import { Loader } from '@googlemaps/js-api-loader';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 import { useEffect } from 'react';
 
 const MapComponent = () => {
-  useEffect(() => {
-    const initMap = () => {
-      const map = new window.google.maps.Map(
-        document.getElementById('map') as HTMLElement,
-        {
-          zoom: 8,
-          center: { lat: -34.397, lng: 150.644 },
-        }
-      );
+  let { lat, lng } = useSelector((state: RootState) => state.map);
 
-      if (typeof window.google !== 'undefined') {
-        initMap();
-      }
-    };
+  const loader = new Loader({
+    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    version: 'weekly',
+    libraries: ['places', 'maps'],
+  });
+
+  const mapOptions = {
+    center: {
+      lat,
+      lng,
+    },
+    zoom: 10,
+  };
+
+  useEffect(() => {
+    loader
+      .importLibrary('maps')
+      .then(({ Map }) => {
+        new Map(document.getElementById('map') as HTMLElement, mapOptions);
+      })
+      .catch((e) => {
+        // do something
+      });
   }, []);
+
+  // loader.load().then(async () => {
+  //   const { Map } = (await google.maps.importLibrary(
+  //     'maps'
+  //   )) as google.maps.MapsLibrary;
+  //   map = new Map(document.getElementById('map') as HTMLElement, {
+  //     center: { lat: -34.397, lng: 150.644 },
+  //     zoom: 8,
+  //   });
+  // });
 
   return <div id="map" style={{ height: '1000px', width: '1000px' }}></div>;
 };
