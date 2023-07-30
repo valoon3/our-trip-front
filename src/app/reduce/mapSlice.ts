@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface mapState {
-  mapElement?: HTMLDivElement;
-  googleMapLoaded: boolean;
+  googleMap?: google.maps.Map;
   lat: number;
   lng: number;
 }
@@ -13,21 +12,14 @@ interface CoordinateType {
 }
 
 const initialState: mapState = {
-  googleMapLoaded: false,
   // 이태원 주소
   lat: 37.5665,
   lng: 126.978,
 };
 
 const reducers = {
-  setMapElement: (state: mapState, action: PayloadAction<HTMLDivElement>) => {
-    state.mapElement = action.payload;
-  },
-  setGoogleMapLoaded: (state: mapState) => {
-    state.googleMapLoaded = true;
-  },
-  setGoogleMapUnloaded: (state: mapState) => {
-    state.googleMapLoaded = false;
+  setGoogleMap: (state: mapState, action: PayloadAction<google.maps.Map>) => {
+    state.googleMap = action.payload;
   },
   setCoordinate: (state: mapState, action: PayloadAction<CoordinateType>) => {
     state.lat = action.payload.lat;
@@ -41,11 +33,6 @@ export const mapSlice = createSlice({
   reducers,
 });
 
-export const {
-  setMapElement,
-  setGoogleMapLoaded,
-  setGoogleMapUnloaded,
-  setCoordinate,
-} = mapSlice.actions;
+export const { setGoogleMap, setCoordinate } = mapSlice.actions;
 
 export default mapSlice.reducer;

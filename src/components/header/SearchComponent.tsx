@@ -1,62 +1,52 @@
 import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { setCoordinate } from '@/app/reduce/mapSlice';
 
 let map: google.maps.Map;
-let services: google.maps.places.PlacesService;
 
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
-  const dispatch = useDispatch();
 
-  // const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const dispatch = useDispatch();
+  let loader = mapLoaderHook();
+
   let onChange = (e: any) => {
     setSearchText(e.target.value);
+    console.log(searchText);
+  };
+
+  const findPlace = (request: google.maps.places.FindPlaceFromQueryRequest) => {
+    loader
+      .importLibrary('places')
+      .then(({ PlacesService }) => {
+        const services = new PlacesService(document.getElementById('map'));
+        services.findPlaceFromQuery(
+          request,
+          (
+            a: google.maps.places.PlaceResult[] | null,
+            b: google.maps.places.PlacesServiceStatus
+          ) => {
+            console.log(a);
+            console.log(b);
+          }
+        );
+        dispatch(setCoordinate({ lat: 1, lng: 1 }));
+      })
+      .catch((err) => {
+        console.error('검색 에러: ', err);
+      });
   };
 
   let onClickHandler = useCallback(() => {
-    if (searchText.length === 0) return console.log('검색어를 입력해주세요');
-
-    // 구글 검색 기능
-    console.log(window.document.getElementById('map')?.children[0]);
-    const map = window.document.getElementById('map')?.children[0];
-    const service = new google.maps.places.PlacesService(map);
-
     const request = {
+      fields: ['ALL'],
       query: searchText,
-      // fields(instance: google.maps.places.Autocomplete, fields: string[]) {
-      //   return ['name', 'geometry'];
-      // },
-      fields: ['name', 'geometry'],
     };
-
-    service.findPlaceFromQuery(request, (results, status) => {
-      console.log('실행');
-
-      if (results === null) return console.log('검색 결과가 없습니다.');
-      else {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (let i = 0; i < results.length; i++) {
-            console.log(results[i]);
-          }
-
-          console.log('asdfasdf');
-          const lat = results[0].geometry.location.lat();
-          const lng = results[0].geometry.location.lng();
-          // map.setCenter(results[0].geometry.location);
-          dispatch(setCoordinate({ lat, lng }));
-        }
-      }
-    });
-
-    // 카카오 검색 기능
-    // kakao.maps.load(() => {
-    //   places = new kakao.maps.services.Places();
-    //   places.keywordSearch(searchText, searchCallback);
-    // });
-  }, [searchText]);
+    findPlace(request);
+  }, [searchText, loader]);
 
   let submitHandler = useCallback(
     (e: any) => {
@@ -66,28 +56,10 @@ const SearchComponent = () => {
     [onClickHandler]
   );
 
-  const searchCallback = useCallback(
-    (
-      result: kakao.maps.services.PlacesSearchResult,
-      status: kakao.maps.services.Status
-    ) => {
-      if (status === kakao.maps.services.Status.ERROR) {
-        console.log('searchCallback Error : ', status);
-        return;
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        console.log('검색 결과가 없습니다.');
-        return;
-      }
-
-      if (result.length === 1) {
-        console.log(result);
-        return;
-      }
-
-      console.log(result);
-    },
-    []
-  );
+  useEffect(() => {
+    console.log('검색 컴포넌트');
+    console.log(loader);
+  }, [loader]);
 
   return (
     <>

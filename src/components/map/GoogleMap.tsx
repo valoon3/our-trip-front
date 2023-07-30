@@ -45,38 +45,52 @@
 //   );
 // };
 
-import { Loader } from '@googlemaps/js-api-loader';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { setGoogleMap } from '@/app/reduce/mapSlice';
+import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 
 const MapComponent = () => {
-  let { lat, lng } = useSelector((state: RootState) => state.map);
+  const { lat, lng } = useSelector((state: RootState) => state.map);
+  const dispatch = useDispatch();
 
-  const loader = new Loader({
-    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-    version: 'weekly',
-    libraries: ['places', 'maps'],
-  });
+  // const loader = new Loader({
+  //   apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+  //   version: 'weekly',
+  //   libraries: ['maps', 'places'],
+  // });
 
-  const mapOptions = {
-    center: {
-      lat,
-      lng,
-    },
-    zoom: 10,
-  };
+  const loader = mapLoaderHook();
+
+  const mapOptions = useMemo(
+    () => ({
+      center: {
+        lat,
+        lng,
+      },
+      zoom: 10,
+      disableDefaultUI: true,
+      clickableIcons: true,
+      scrollwheel: false,
+    }),
+    [lng, lat]
+  );
 
   useEffect(() => {
     loader
       .importLibrary('maps')
       .then(({ Map }) => {
-        new Map(document.getElementById('map') as HTMLElement, mapOptions);
+        const map = new Map(
+          document.getElementById('map') as HTMLElement,
+          mapOptions
+        );
+        setGoogleMap(map);
       })
       .catch((e) => {
         // do something
       });
-  }, []);
+  }, [mapOptions]);
 
   // loader.load().then(async () => {
   //   const { Map } = (await google.maps.importLibrary(
