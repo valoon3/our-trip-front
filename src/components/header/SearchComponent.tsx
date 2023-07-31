@@ -1,38 +1,54 @@
 import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { setCoordinate, setZoom } from '@/app/reduce/mapSlice';
+import { Loader } from '@googlemaps/js-api-loader';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
-import { setCoordinate } from '@/app/reduce/mapSlice';
 
 let map: google.maps.Map;
 
+type Props = {
+  loader: Loader;
+};
+
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
+  const loader = mapLoaderHook.getInstance();
 
   const dispatch = useDispatch();
-  let loader = mapLoaderHook();
 
   let onChange = (e: any) => {
     setSearchText(e.target.value);
     console.log(searchText);
   };
 
+  const googleFindPlaceCallback = (
+    placeResultArray: google.maps.places.PlaceResult[] | null,
+    status: google.maps.places.PlacesServiceStatus
+  ) => {
+    if (status === 'OK' && placeResultArray !== null) {
+      const location = placeResultArray[0].geometry?.location;
+      dispatch(
+        setCoordinate({
+          lat: location?.lat() || 101,
+          lng: location?.lng() || 101,
+        })
+      );
+      console.log(placeResultArray[0].geometry?.location?.lat());
+    }
+  };
+
   const findPlace = (request: google.maps.places.FindPlaceFromQueryRequest) => {
     loader
       .importLibrary('places')
-      .then(({ PlacesService }) => {
-        const services = new PlacesService(document.getElementById('map'));
-        services.findPlaceFromQuery(
-          request,
-          (
-            a: google.maps.places.PlaceResult[] | null,
-            b: google.maps.places.PlacesServiceStatus
-          ) => {
-            console.log(a);
-            console.log(b);
-          }
+      .then(async ({ PlacesService }) => {
+        const services = new PlacesService(
+          document.getElementById('map') as HTMLDivElement
         );
+
+        services.findPlaceFromQuery(request, googleFindPlaceCallback);
+
         dispatch(setCoordinate({ lat: 1, lng: 1 }));
       })
       .catch((err) => {
@@ -46,6 +62,7 @@ const SearchComponent = () => {
       query: searchText,
     };
     findPlace(request);
+    dispatch(setZoom(13));
   }, [searchText, loader]);
 
   let submitHandler = useCallback(
@@ -55,11 +72,6 @@ const SearchComponent = () => {
     },
     [onClickHandler]
   );
-
-  useEffect(() => {
-    console.log('검색 컴포넌트');
-    console.log(loader);
-  }, [loader]);
 
   return (
     <>

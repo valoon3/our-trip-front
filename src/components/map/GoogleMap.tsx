@@ -47,21 +47,15 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { useEffect, useMemo } from 'react';
-import { setGoogleMap } from '@/app/reduce/mapSlice';
+import { useEffect, useMemo, useRef } from 'react';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 
 const MapComponent = () => {
-  const { lat, lng } = useSelector((state: RootState) => state.map);
+  const { lat, lng, zoom } = useSelector((state: RootState) => state.map);
   const dispatch = useDispatch();
+  const ref = useRef();
 
-  // const loader = new Loader({
-  //   apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-  //   version: 'weekly',
-  //   libraries: ['maps', 'places'],
-  // });
-
-  const loader = mapLoaderHook();
+  const loader = mapLoaderHook.getInstance();
 
   const mapOptions = useMemo(
     () => ({
@@ -69,15 +63,18 @@ const MapComponent = () => {
         lat,
         lng,
       },
-      zoom: 10,
+      zoom,
       disableDefaultUI: true,
       clickableIcons: true,
       scrollwheel: false,
     }),
-    [lng, lat]
+    [lng, lat, zoom]
   );
 
   useEffect(() => {
+    console.log('맵 로딩');
+    window.google.maps.DirectionsService;
+
     loader
       .importLibrary('maps')
       .then(({ Map }) => {
@@ -85,7 +82,6 @@ const MapComponent = () => {
           document.getElementById('map') as HTMLElement,
           mapOptions
         );
-        setGoogleMap(map);
       })
       .catch((e) => {
         // do something

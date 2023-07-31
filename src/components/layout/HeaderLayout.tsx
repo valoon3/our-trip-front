@@ -3,8 +3,13 @@ import Link from 'next/link';
 import styled from '@/styles/header.module.scss';
 import LoginComponent from '@/components/header/LoginComponent';
 import SearchComponent from '@/components/header/SearchComponent';
+import { Loader } from '@googlemaps/js-api-loader';
 
-const HeaderLayout = () => {
+type Props = {
+  loader: Loader;
+};
+
+const HeaderLayout = ({ loader }: Props) => {
   return (
     <header>
       <div className={styled.header}>
