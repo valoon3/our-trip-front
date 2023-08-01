@@ -1,10 +1,11 @@
 import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setCoordinate, setZoom } from '@/app/reduce/mapSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMapOption, setZoom } from '@/app/reduce/mapSlice';
 import { Loader } from '@googlemaps/js-api-loader';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
+import { RootState } from '@/app/store';
 
 let map: google.maps.Map;
 
@@ -15,45 +16,54 @@ type Props = {
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
   const loader = mapLoaderHook.getInstance();
+  let { lng, lat, zoom } = useSelector((state: RootState) => state.map);
 
   const dispatch = useDispatch();
 
-  let onChange = (e: any) => {
-    setSearchText(e.target.value);
-    console.log(searchText);
-  };
+  let onChange = useCallback(
+    (e: any) => {
+      setSearchText(e.target.value);
+      console.log(searchText);
+    },
+    [searchText]
+  );
 
-  const googleFindPlaceCallback = (
-    placeResultArray: google.maps.places.PlaceResult[] | null,
-    status: google.maps.places.PlacesServiceStatus
-  ) => {
-    if (status === 'OK' && placeResultArray !== null) {
-      const location = placeResultArray[0].geometry?.location;
-      dispatch(
-        setCoordinate({
-          lat: location?.lat() || 101,
-          lng: location?.lng() || 101,
-        })
-      );
-      console.log(placeResultArray[0].geometry?.location?.lat());
-    }
-  };
+  const googleFindPlaceCallback = useCallback(
+    (
+      placeResultArray: google.maps.places.PlaceResult[] | null,
+      status: google.maps.places.PlacesServiceStatus
+    ) => {
+      console.log(placeResultArray);
+      console.log(status);
+      if (status === 'OK' && placeResultArray !== null) {
+        const location = placeResultArray[0].geometry?.location;
+
+        dispatch(
+          setMapOption({
+            lat: location?.lat() || lat,
+            lng: location?.lng() || lng,
+            zoom: 14,
+          })
+        );
+        console.log(placeResultArray[0].geometry?.location?.lat());
+      }
+    },
+    []
+  );
 
   const findPlace = (request: google.maps.places.FindPlaceFromQueryRequest) => {
-    loader
-      .importLibrary('places')
-      .then(async ({ PlacesService }) => {
+    (async function searchPlace() {
+      const { PlacesService } = await loader.importLibrary('places');
+
+      try {
         const services = new PlacesService(
           document.getElementById('map') as HTMLDivElement
         );
-
         services.findPlaceFromQuery(request, googleFindPlaceCallback);
-
-        dispatch(setCoordinate({ lat: 1, lng: 1 }));
-      })
-      .catch((err) => {
-        console.error('검색 에러: ', err);
-      });
+      } catch (err) {
+        console.error('검색 에러 : ', err);
+      }
+    })();
   };
 
   let onClickHandler = useCallback(() => {
