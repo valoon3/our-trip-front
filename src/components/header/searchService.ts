@@ -8,6 +8,10 @@ export class SearchService {
   private loader: Loader;
   private mapState = useSelector((state: RootState) => state.map);
   private dispatch = useDispatch();
+  private request: google.maps.places.TextSearchRequest = {
+    language: 'ko' || 'en',
+    // query: '이태원',
+  };
 
   constructor() {
     this.loader = mapLoaderHook.getInstance();
@@ -37,6 +41,9 @@ export class SearchService {
     console.log(status);
 
     if (status === 'OK' && placeResultArray !== null) {
+      placeResultArray.sort(
+        (a, b) => (b.rating as number) - (a.rating as number)
+      );
       const placeArray = new Array<SetMapOptionType>();
 
       placeResultArray.forEach((place, index) => {
@@ -48,7 +55,6 @@ export class SearchService {
           name: place.name,
           lat: lat,
           lng: lng,
-          zoom: 13,
         };
 
         placeArray.push(point);
@@ -61,7 +67,7 @@ export class SearchService {
           lng:
             placeResultArray[0].geometry?.location?.lng() || this.mapState.lng,
           markers: placeArray,
-          zoom: 14,
+          zoom: 16,
         })
       );
     }

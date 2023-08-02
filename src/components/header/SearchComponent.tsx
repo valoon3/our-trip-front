@@ -1,12 +1,10 @@
 import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
 import React, { useCallback, useState } from 'react';
-import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { SearchService } from '@/components/header/searchService';
 
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
-  const loader = mapLoaderHook.getInstance();
   const searchService = new SearchService();
 
   let onChange = useCallback(
@@ -23,7 +21,7 @@ const SearchComponent = () => {
       fields: ['ALL'],
     };
     searchService.findPlace(request).then(() => {});
-  }, [searchText, searchService]);
+  }, [searchText]);
 
   let submitHandler = useCallback(
     (e: any) => {
