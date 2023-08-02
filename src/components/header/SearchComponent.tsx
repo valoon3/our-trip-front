@@ -1,17 +1,13 @@
 import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setMapOption, SetMapOptionType } from '@/app/reduce/mapSlice';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
-import { RootState } from '@/app/store';
+import { SearchService } from '@/components/header/searchService';
 
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
   const loader = mapLoaderHook.getInstance();
-  let { lng, lat, zoom } = useSelector((state: RootState) => state.map);
-
-  const dispatch = useDispatch();
+  const searchService = new SearchService();
 
   let onChange = useCallback(
     (e: any) => {
@@ -21,66 +17,13 @@ const SearchComponent = () => {
     [searchText]
   );
 
-  const googleFindPlaceCallback = useCallback(
-    (
-      placeResultArray: google.maps.places.PlaceResult[] | null,
-      status: google.maps.places.PlacesServiceStatus
-    ) => {
-      console.log(placeResultArray);
-      console.log(status);
-      if (status === 'OK' && placeResultArray !== null) {
-        const placeArray = new Array<SetMapOptionType>();
-
-        placeResultArray.forEach((place, index) => {
-          const location = place.geometry?.location;
-          const lat = location?.lat();
-          const lng = location?.lng();
-
-          const point: SetMapOptionType = {
-            name: place.name,
-            lat: lat,
-            lng: lng,
-            zoom: 13,
-          };
-
-          placeArray.push(point);
-        });
-
-        dispatch(
-          setMapOption({
-            lat: placeResultArray[0].geometry?.location?.lat() || lat,
-            lng: placeResultArray[0].geometry?.location?.lng() || lng,
-            markers: placeArray,
-            zoom: 14,
-          })
-        );
-      }
-    },
-    []
-  );
-
-  const findPlace = (request: google.maps.places.FindPlaceFromQueryRequest) => {
-    (async function searchPlace() {
-      const { PlacesService } = await loader.importLibrary('places');
-
-      try {
-        const services = new PlacesService(
-          document.getElementById('map') as HTMLDivElement
-        );
-        services.findPlaceFromQuery(request, googleFindPlaceCallback);
-      } catch (err) {
-        console.error('검색 에러 : ', err);
-      }
-    })();
-  };
-
   let onClickHandler = useCallback(() => {
     const request = {
       query: searchText,
       fields: ['ALL'],
     };
-    findPlace(request);
-  }, [searchText, loader]);
+    searchService.findPlace(request).then(() => {});
+  }, [searchText, searchService]);
 
   let submitHandler = useCallback(
     (e: any) => {
