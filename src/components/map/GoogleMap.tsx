@@ -1,11 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { useEffect, useMemo } from 'react';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 
 const MapComponent = () => {
   const mapState = useSelector((state: RootState) => state.map);
-  const dispatch = useDispatch();
 
   const loader = mapLoaderHook.getInstance();
 
@@ -18,7 +17,7 @@ const MapComponent = () => {
       zoom: mapState.zoom,
       disableDefaultUI: true,
       clickableIcons: true,
-      // scrollwheel: false,
+      markers: mapState.markers,
     }),
     [mapState]
   );
@@ -28,9 +27,7 @@ const MapComponent = () => {
 
     (async function loadMap() {
       const { Map } = await loader.importLibrary('maps');
-      const { Marker, AdvancedMarkerElement } = await loader.importLibrary(
-        'marker'
-      );
+      const { Marker } = await loader.importLibrary('marker');
 
       try {
         const map = new Map(
@@ -38,11 +35,18 @@ const MapComponent = () => {
           mapOptions
         );
 
-        const marker = new Marker({
-          map: map,
-          position: { lat: mapOptions.center.lat, lng: mapOptions.center.lng },
-          title: 'first',
-        });
+        if (mapOptions.markers.length > 0) {
+          mapOptions.markers.forEach((marker) => {
+            new Marker({
+              map: map,
+              position: {
+                lat: marker.lat,
+                lng: marker.lng,
+              },
+              title: marker.name,
+            });
+          });
+        }
       } catch (err) {
         console.error('맵 로딩 에러: ', err);
       }

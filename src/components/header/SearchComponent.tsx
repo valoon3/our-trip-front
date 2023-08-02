@@ -2,16 +2,9 @@ import styled from '@/styles/header.module.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMapOption, setZoom } from '@/app/reduce/mapSlice';
-import { Loader } from '@googlemaps/js-api-loader';
+import { setMapOption, SetMapOptionType } from '@/app/reduce/mapSlice';
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { RootState } from '@/app/store';
-
-let map: google.maps.Map;
-
-type Props = {
-  loader: Loader;
-};
 
 const SearchComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
@@ -36,16 +29,31 @@ const SearchComponent = () => {
       console.log(placeResultArray);
       console.log(status);
       if (status === 'OK' && placeResultArray !== null) {
-        const location = placeResultArray[0].geometry?.location;
+        const placeArray = new Array<SetMapOptionType>();
+
+        placeResultArray.forEach((place, index) => {
+          const location = place.geometry?.location;
+          const lat = location?.lat();
+          const lng = location?.lng();
+
+          const point: SetMapOptionType = {
+            name: place.name,
+            lat: lat,
+            lng: lng,
+            zoom: 13,
+          };
+
+          placeArray.push(point);
+        });
 
         dispatch(
           setMapOption({
-            lat: location?.lat() || lat,
-            lng: location?.lng() || lng,
+            lat: placeResultArray[0].geometry?.location?.lat() || lat,
+            lng: placeResultArray[0].geometry?.location?.lng() || lng,
+            markers: placeArray,
             zoom: 14,
           })
         );
-        console.log(placeResultArray[0].geometry?.location?.lat());
       }
     },
     []
@@ -68,11 +76,10 @@ const SearchComponent = () => {
 
   let onClickHandler = useCallback(() => {
     const request = {
-      fields: ['ALL'],
       query: searchText,
+      fields: ['ALL'],
     };
     findPlace(request);
-    dispatch(setZoom(13));
   }, [searchText, loader]);
 
   let submitHandler = useCallback(

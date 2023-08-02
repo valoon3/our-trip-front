@@ -4,32 +4,51 @@ interface mapState {
   lat: number;
   lng: number;
   zoom: number;
+  markers: Array<MarkerOptionType>;
 }
 
-interface CoordinateType {
+type MarkerOptionType = {
+  name: string;
   lat: number;
   lng: number;
-}
+};
+
+type SetMarkerOptionsType = {
+  name?: string;
+  lat?: number;
+  lng?: number;
+};
+
+export type LatLngType = {
+  lat: number;
+  lng: number;
+};
+
+export type SetMapOptionType = {
+  name?: string;
+  lat?: number;
+  lng?: number;
+  zoom?: number;
+  markers?: Array<any>;
+};
 
 const initialState: mapState = {
   // 이태원 주소
   lat: 37.5665,
   lng: 126.978,
   zoom: 10,
+  markers: [],
 };
 
 const reducers = {
-  // setGoogleMap: (state: mapState, action: PayloadAction<HTMLElement>) => {
-  //   state.googleMapElement = action.payload;
-  // },
-  setLatLng: (state: mapState, action: PayloadAction<CoordinateType>) => {
+  setLatLng: (state: mapState, action: PayloadAction<LatLngType>) => {
     state.lat = action.payload.lat;
     state.lng = action.payload.lng;
   },
   setZoom: (state: mapState, action: PayloadAction<number>) => {
     state.zoom = action.payload;
   },
-  setMapOption: (state: mapState, action: PayloadAction<any>) => {
+  setMapOption: (state: mapState, action: PayloadAction<SetMapOptionType>) => {
     for (const [key, value] of Object.entries(action.payload)) {
       // @ts-ignore
       state[key] = value;
