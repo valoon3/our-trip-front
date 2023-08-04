@@ -2,10 +2,8 @@ import AppLayout from '@/components/layout/AppLayout';
 
 export default function Home() {
   return (
-    <>
-      <main>
-        <AppLayout />
-      </main>
-    </>
+    <main>
+      <AppLayout />
+    </main>
   );
 }
