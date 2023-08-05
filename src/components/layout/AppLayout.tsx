@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'antd';
 import HeaderLayout from '@/components/layout/HeaderLayout';
 import MapSectionComponent from '@/components/layout/MapSectionComponent';
-import ListContent from '@/components/list/ListContent';
+import RightSideContent from '@/components/list/RightSideContent';
 
 type Props = {
   // children: React.ReactElement
@@ -16,16 +16,16 @@ const Layout = () => {
 
   return (
     <>
-      <HeaderLayout />
       <Row>
         <Col span={16}>
           <div style={{ height: HEADER_SIZE }}>
+            <HeaderLayout />
             <MapSectionComponent />
           </div>
         </Col>
         <Col span={8}>
           <div style={{ height: HEADER_SIZE }}>
-            <ListContent />
+            <RightSideContent />
           </div>
         </Col>
       </Row>
