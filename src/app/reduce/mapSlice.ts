@@ -4,14 +4,24 @@ interface mapState {
   lat: number;
   lng: number;
   zoom: number;
-  markers: Array<MarkerOptionType>;
+  markers: Array<google.maps.places.PlaceResult>;
 }
+
+export type SetMapOptionType = {
+  name?: string;
+  lat?: number;
+  lng?: number;
+  zoom?: number;
+  markers?: Array<google.maps.places.PlaceResult>;
+};
 
 type MarkerOptionType = {
   name: string;
   lat: number;
   lng: number;
 };
+
+type PlaceResult = google.maps.places.PlaceResult;
 
 type SetMarkerOptionsType = {
   name?: string;
@@ -22,14 +32,6 @@ type SetMarkerOptionsType = {
 export type LatLngType = {
   lat: number;
   lng: number;
-};
-
-export type SetMapOptionType = {
-  name?: string;
-  lat?: number;
-  lng?: number;
-  zoom?: number;
-  markers?: Array<any>;
 };
 
 const initialState: mapState = {

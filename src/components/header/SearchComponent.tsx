@@ -10,7 +10,7 @@ const SearchComponent = () => {
   let onChange = useCallback(
     (e: any) => {
       setSearchText(e.target.value);
-      console.log(searchText);
+      // console.log(searchText);
     },
     [searchText]
   );

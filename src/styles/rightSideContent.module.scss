@@ -12,14 +12,18 @@
 
   .content {
     width: 100%;
-    float: left;
-    margin: 10px;
+    padding: 5px;
 
     .searchContent {
+      box-sizing: border-box;
       border: 1px solid black;
-      margin: 3px;
       padding: 20px;
+      margin: 5px 0px;
       box-shadow: 0 0 5px gray;
+
+      .sort {
+        display: flex;
+      }
     }
   }
 

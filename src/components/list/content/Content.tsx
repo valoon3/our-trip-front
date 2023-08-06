@@ -1,15 +1,19 @@
 import styled from '@/styles/rightSideContent.module.scss';
 import SearchContent from '@/components/list/content/SearchContent';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 
 const Content = () => {
-  // SearchContent
-  // BookMarkContent
+  const { markers } = useSelector((state: RootState) => state.map);
+
+  console.log(markers);
 
   return (
     <div className={styled.content}>
-      <SearchContent title={'제목'} />
-      <SearchContent title={'제목'} />
-      <SearchContent title={'제목'} />
+      {markers.map(
+        (marker, index) =>
+          marker.name && <SearchContent key={index} title={marker.name} />
+      )}
     </div>
   );
 };

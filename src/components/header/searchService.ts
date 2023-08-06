@@ -2,7 +2,7 @@ import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { Loader } from '@googlemaps/js-api-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { setMapOption, SetMapOptionType } from '@/app/reduce/mapSlice';
+import { setMapOption } from '@/app/reduce/mapSlice';
 
 export class SearchService {
   private loader: Loader;
@@ -44,21 +44,21 @@ export class SearchService {
       placeResultArray.sort(
         (a, b) => (b.rating as number) - (a.rating as number)
       );
-      const placeArray = new Array<SetMapOptionType>();
-
-      placeResultArray.forEach((place, index) => {
-        const location = place.geometry?.location;
-        const lat = location?.lat();
-        const lng = location?.lng();
-
-        const point: SetMapOptionType = {
-          name: place.name,
-          lat: lat,
-          lng: lng,
-        };
-
-        placeArray.push(point);
-      });
+      // const placeArray = new Array<SetMapOptionType>();
+      //
+      // placeResultArray.forEach((place, index) => {
+      //   const location = place.geometry?.location;
+      //   const lat = location?.lat();
+      //   const lng = location?.lng();
+      //
+      //   const point: SetMapOptionType = {
+      //     name: place.name,
+      //     lat: lat,
+      //     lng: lng,
+      //   };
+      //
+      //   placeArray.push(point);
+      // });
 
       this.dispatch(
         setMapOption({
@@ -66,7 +66,7 @@ export class SearchService {
             placeResultArray[0].geometry?.location?.lat() || this.mapState.lat,
           lng:
             placeResultArray[0].geometry?.location?.lng() || this.mapState.lng,
-          markers: placeArray,
+          markers: placeResultArray,
           zoom: 16,
         })
       );

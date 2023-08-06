@@ -40,8 +40,8 @@ const MapComponent = () => {
             new Marker({
               map: map,
               position: {
-                lat: marker.lat,
-                lng: marker.lng,
+                lat: marker.geometry?.location?.lat() as number,
+                lng: marker.geometry?.location?.lng() as number,
               },
               title: marker.name,
             });
