@@ -17,15 +17,57 @@ export class SearchService {
     this.loader = mapLoaderHook.getInstance();
   }
 
+  public findPlaceDetail = async (placeId: string) => {
+    const { Map } = await this.loader.importLibrary('maps');
+    const { PlacesService } = await this.loader.importLibrary('places');
+
+    const placeDetailRequest: google.maps.places.PlaceDetailsRequest = {
+      placeId: '',
+      language: 'ko' || 'en',
+      fields: [
+        // 'photos',
+        // 'reviews',
+        // 'opening_hours',
+        // 'current_opening_hours',
+        // 'bussiness_status',
+        // 'formatted_address',
+        'ALL',
+      ],
+    };
+    placeDetailRequest.placeId = placeId;
+
+    try {
+      const map = new Map(
+        document.getElementById('searchDiv') as HTMLDivElement
+      );
+
+      const services = new PlacesService(
+        // document.getElementById('map') as HTMLDivElement
+        map
+      );
+      services.getDetails(
+        placeDetailRequest,
+        (
+          placeResult: google.maps.places.PlaceResult | null,
+          placesServiceStatus: google.maps.places.PlacesServiceStatus
+        ) => {
+          console.log(placeResult);
+          console.log(placesServiceStatus);
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   public findPlace = async (
     request: google.maps.places.FindPlaceFromQueryRequest
   ): Promise<void> => {
     const { PlacesService } = await this.loader.importLibrary('places');
 
     try {
-      const services = new PlacesService(
-        document.getElementById('map') as HTMLDivElement
-      );
+      const map = document.getElementById('searchDiv') as HTMLDivElement;
+      const services = new PlacesService(map);
       // services.findPlaceFromQuery(request, this.googleFindPlace);
       services.textSearch(request, this.googleFindPlace);
     } catch (err) {

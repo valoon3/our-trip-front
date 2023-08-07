@@ -1,11 +1,11 @@
 import styled from '@/styles/rightSideContent.module.scss';
-import Content from '@/components/list/content/Content';
+import ContentList from '@/components/list/content/ContentList';
 
 const RightSideContent = () => {
   return (
     <div className={styled.rightSideContent}>
       <div>List header</div>
-      <Content />
+      <ContentList />
     </div>
   );
 };

@@ -53,7 +53,12 @@ const MapComponent = () => {
     })();
   }, [mapOptions]);
 
-  return <div id="map" style={{ width: '100%', height: '100%' }} />;
+  return (
+    <>
+      <div id="map" style={{ width: '100%', height: '100%' }} />
+      <div id="searchDiv" style={{ visibility: 'hidden' }}></div>
+    </>
+  );
 };
 
 export default MapComponent;

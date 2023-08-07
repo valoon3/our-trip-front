@@ -1,31 +1,62 @@
 import styled from '@/styles/rightSideContent.module.scss';
 import { useCallback, useState } from 'react';
 import { BsStar, BsStarFill } from 'react-icons/bs';
+import { HiChevronDoubleDown } from 'react-icons/hi';
+import { SearchService } from '@/components/header/searchService';
 
 type Props = {
-  title: string;
+  key: number;
+  placeResult: google.maps.places.PlaceResult;
+  userCheck: () => boolean;
 };
 
-const SearchContent = ({ title }: Props) => {
+const START_SIZE = '22';
+
+const SearchContent = ({ placeResult, userCheck }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
+  const searchService = new SearchService();
 
   const bookMarkStarHandler = useCallback(() => {
+    if (!userCheck()) {
+      return;
+    }
     setBookMarkStar(!bookMarkStar);
   }, [bookMarkStar]);
+
+  const detailOnClickHandler = useCallback(() => {
+    if (typeof placeResult.place_id === 'string')
+      searchService.findPlaceDetail(placeResult.place_id);
+  }, []);
 
   return (
     <div className={styled.searchContent}>
       <div className={styled.sort}>
-        <div>{title}</div>
+        <div style={{ cursor: 'pointer' }}>{placeResult.name}</div>
         {bookMarkStar ? (
-          <BsStarFill onClick={bookMarkStarHandler} size="22" color="gold" />
+          <BsStarFill
+            onClick={bookMarkStarHandler}
+            size={START_SIZE}
+            color="gold"
+            style={{ cursor: 'pointer' }}
+          />
         ) : (
-          <BsStar onClick={bookMarkStarHandler} size="22" />
+          <BsStar
+            onClick={bookMarkStarHandler}
+            size={START_SIZE}
+            style={{ cursor: 'pointer' }}
+          />
         )}
       </div>
 
       <hr />
-      <div>내용</div>
+      <div className={styled.sort}>
+        {/*<div>내용</div>*/}
+        {/*{placeResult.photos?.map((photo) => photo.html_attributions)}*/}
+        <HiChevronDoubleDown
+          onClick={detailOnClickHandler}
+          style={{ cursor: 'pointer' }}
+        />
+      </div>
     </div>
   );
 };

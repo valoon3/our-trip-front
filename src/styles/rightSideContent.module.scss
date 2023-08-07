@@ -3,20 +3,19 @@
   display: block;
   //justify-content: left;
   //align-items: center;
-  //width: 100%;
-  //height: 100%;
+  width: 100%;
+  height: 100%;
 
-  div {
+  .contentList {
     width: 100%;
-  }
-
-  .content {
-    width: 100%;
+    height: 100%;
     padding: 5px;
 
     .searchContent {
+      //float: right;
       box-sizing: border-box;
       border: 1px solid black;
+
       padding: 20px;
       margin: 5px 0px;
       box-shadow: 0 0 5px gray;
