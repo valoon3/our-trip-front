@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
+import axios from 'axios';
 
 type Props = {
   key: number;
@@ -16,10 +17,17 @@ const SearchContent = ({ placeResult, userCheck }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
   const searchService = new SearchService();
 
-  const bookMarkStarHandler = useCallback(() => {
+  const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
       return;
     }
+
+    bookMarkStar
+      ? await axios.delete('/trip/bookmark/' + placeResult.place_id)
+      : await axios.post('/trip/bookmark', {
+          placeResult,
+        });
+
     setBookMarkStar(!bookMarkStar);
   }, [bookMarkStar]);
 
