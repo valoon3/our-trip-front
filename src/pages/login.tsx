@@ -54,6 +54,7 @@ const Login = () => {
                 error={errors.emailError}
               />
               <InputGroup
+                type={'password'}
                 placeholder={'Password'}
                 value={password}
                 setValue={setPassword}
