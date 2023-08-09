@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { batch } from 'react-redux';
 
 interface mapState {
   lat: number;
@@ -56,6 +57,9 @@ const reducers = {
       state[key] = value;
     }
   },
+  setPlaceResult: (state: mapState, action: PayloadAction<any>) => {
+    state.markers = action.payload;
+  },
 };
 
 export const mapSlice = createSlice({
@@ -64,6 +68,25 @@ export const mapSlice = createSlice({
   reducers,
 });
 
-export const { setLatLng, setZoom, setMapOption } = mapSlice.actions;
+export const setMarkerAndOptionsThunk = (
+  placeResultArray: google.maps.places.PlaceResult[],
+  dispatch: any
+) => {
+  return () => {
+    batch(() => {
+      dispatch(
+        // 맵 옵션 설정
+        setMapOption({
+          lat: placeResultArray[0].geometry?.location?.lat(),
+          lng: placeResultArray[0].geometry?.location?.lng(),
+        })
+      );
+      dispatch(setPlaceResult({ placeResultArray }));
+    });
+  };
+};
+
+export const { setLatLng, setZoom, setMapOption, setPlaceResult } =
+  mapSlice.actions;
 
 export default mapSlice.reducer;

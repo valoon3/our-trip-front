@@ -6,10 +6,9 @@ import { useCallback } from 'react';
 
 const ContentList = () => {
   const { markers } = useSelector((state: RootState) => state.map);
-
   const user = useSelector((state: RootState) => state.user);
 
-  const userCheck = useCallback(() => {
+  const userLoginCheck = useCallback(() => {
     if (!user.loginToggle) {
       alert('로그인 후 이용해주세요.');
     }
@@ -17,7 +16,14 @@ const ContentList = () => {
     return user.loginToggle;
   }, [user]);
 
-  console.log(markers);
+  // useEffect(() => {
+  //   if (user.loginToggle) {
+  //     axios.get('/trip/bookmark').then((res) => {
+  //       console.log('결과 : ' + res.data);
+  //       setBookmarks([...res.data]);
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div className={styled.contentList}>
@@ -27,7 +33,7 @@ const ContentList = () => {
             <SearchContent
               key={index}
               placeResult={marker}
-              userCheck={userCheck}
+              userCheck={userLoginCheck}
             />
           )
       )}
