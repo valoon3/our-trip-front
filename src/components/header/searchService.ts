@@ -1,12 +1,10 @@
 import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { Loader } from '@googlemaps/js-api-loader';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
+import { useDispatch } from 'react-redux';
 import { setMarkerAndOptionsThunk } from '@/app/reduce/mapSlice';
 
 export class SearchService {
   private loader: Loader;
-  private mapState = useSelector((state: RootState) => state.map);
   private dispatch = useDispatch();
   private request: google.maps.places.TextSearchRequest = {
     language: 'ko' || 'en',
@@ -69,7 +67,7 @@ export class SearchService {
       const map = document.getElementById('searchDiv') as HTMLDivElement;
       const services = new PlacesService(map);
       // services.findPlaceFromQuery(request, this.googleFindPlace);
-      services.textSearch(request, await this.googleFindPlace);
+      services.textSearch(request, this.googleFindPlace);
     } catch (err) {
       console.error('검색 에러 : ', err);
     }
@@ -86,6 +84,9 @@ export class SearchService {
       placeResultArray.sort(
         (a, b) => (b.rating as number) - (a.rating as number)
       );
+
+      // const result = await axios.get('/trip/bookmark');
+      // const bookmark = result.data;
 
       setMarkerAndOptionsThunk(placeResultArray, this.dispatch)();
     }
