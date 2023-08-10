@@ -4,10 +4,11 @@ import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
 import axios from 'axios';
+import { GoogleMapPlaceResult } from '@/types/googleMap.type';
 
 type Props = {
   key: number;
-  placeResult: google.maps.places.PlaceResult;
+  placeResult: GoogleMapPlaceResult;
   userCheck: () => boolean;
 };
 

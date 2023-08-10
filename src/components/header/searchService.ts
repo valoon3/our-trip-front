@@ -2,6 +2,7 @@ import mapLoaderHook from '@/coustomHook/mapLoaderHook';
 import { Loader } from '@googlemaps/js-api-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
+import { setMarkerAndOptionsThunk } from '@/app/reduce/mapSlice';
 
 export class SearchService {
   private loader: Loader;
@@ -86,14 +87,7 @@ export class SearchService {
         (a, b) => (b.rating as number) - (a.rating as number)
       );
 
-      setMarkerAndOptionsTunk(placeResultArray, this.dispatch);
-
-      // this.dispatch(
-      //   setMapOption({
-      //     markers: placeResultArray,
-      //     zoom: 16,
-      //   })
-      // );
+      setMarkerAndOptionsThunk(placeResultArray, this.dispatch)();
     }
   };
 }

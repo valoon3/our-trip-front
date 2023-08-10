@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
+import { GoogleMapPlaceResult } from '@/types/googleMap.type';
 
 interface mapState {
   lat: number;
   lng: number;
   zoom: number;
-  markers: Array<google.maps.places.PlaceResult>;
+  markers: Array<GoogleMapPlaceResult>;
 }
 
 export type SetMapOptionType = {
@@ -21,8 +22,6 @@ type MarkerOptionType = {
   lat: number;
   lng: number;
 };
-
-type PlaceResult = google.maps.places.PlaceResult;
 
 type SetMarkerOptionsType = {
   name?: string;
@@ -57,7 +56,10 @@ const reducers = {
       state[key] = value;
     }
   },
-  setPlaceResult: (state: mapState, action: PayloadAction<any>) => {
+  setMarkers: (
+    state: mapState,
+    action: PayloadAction<GoogleMapPlaceResult[]>
+  ) => {
     state.markers = action.payload;
   },
 };
@@ -74,19 +76,40 @@ export const setMarkerAndOptionsThunk = (
 ) => {
   return () => {
     batch(() => {
+      const markerArray = placeResultArray.map(
+        (placeResult): GoogleMapPlaceResult => {
+          return {
+            business_status: placeResult.business_status,
+            formatted_address: placeResult.formatted_address,
+            lat: placeResult.geometry?.location?.lat(),
+            lng: placeResult.geometry?.location?.lng(),
+            icon: placeResult.icon,
+            icon_background_color: placeResult.icon_background_color,
+            icon_mask_base_uri: placeResult.icon_mask_base_uri,
+            name: placeResult.name,
+            isOpen: placeResult.opening_hours?.isOpen(),
+            place_id: placeResult.place_id,
+            rating: placeResult.rating,
+            types: placeResult.types ? [...placeResult.types] : [],
+            user_ratings_total: placeResult.user_ratings_total,
+          };
+        }
+      );
+
       dispatch(
         // 맵 옵션 설정
         setMapOption({
           lat: placeResultArray[0].geometry?.location?.lat(),
           lng: placeResultArray[0].geometry?.location?.lng(),
+          zoom: 16,
         })
       );
-      dispatch(setPlaceResult({ placeResultArray }));
+      dispatch(setMarkers(markerArray));
     });
   };
 };
 
-export const { setLatLng, setZoom, setMapOption, setPlaceResult } =
+export const { setLatLng, setZoom, setMapOption, setMarkers } =
   mapSlice.actions;
 
 export default mapSlice.reducer;
