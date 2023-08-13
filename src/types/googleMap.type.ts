@@ -1,4 +1,6 @@
 export interface GoogleMapPlaceResult {
+  // backend 에 place 테이블과 일치시키기
+
   business_status?: string;
   formatted_address?: string;
   lng?: number;

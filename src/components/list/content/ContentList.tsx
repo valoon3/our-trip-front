@@ -27,16 +27,13 @@ const ContentList = () => {
 
   return (
     <div className={styled.contentList}>
-      {markers.map(
-        (marker, index) =>
-          marker.name && (
-            <SearchContent
-              key={index}
-              placeResult={marker}
-              userCheck={userLoginCheck}
-            />
-          )
-      )}
+      {markers.map((marker, index) => (
+        <SearchContent
+          key={index}
+          placeResult={markers[0]}
+          userCheck={userLoginCheck}
+        />
+      ))}
     </div>
   );
 };

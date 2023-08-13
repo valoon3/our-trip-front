@@ -18,9 +18,17 @@ const SearchContent = ({ placeResult, userCheck }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
   const searchService = new SearchService();
 
-  axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
-    setBookMarkStar(res.data);
-  });
+  // 이거 수정하자
+
+  const checkStart = useCallback(() => {
+    console.log('/trip/bookmark/' + placeResult.place_id);
+    axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
+      console.log(res.data);
+      setBookMarkStar(res.data);
+    });
+  }, []);
+
+  checkStart();
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
