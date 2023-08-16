@@ -27,5 +27,26 @@
     }
   }
 
+  .listSelectBox {
+    text-align: center;
+
+    div {
+      float: left;
+      width: 33.333%;
+      border: 2px solid black;
+      border-radius: 20% 20% 0% 0%;
+      cursor: pointer;
+    }
+
+    .toggle {
+      color: black;
+    }
+
+    .toggleActive {
+      background-color: #003b95;
+      color: white;
+    }
+
+  }
 
 }

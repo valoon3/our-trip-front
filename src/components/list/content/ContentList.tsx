@@ -16,21 +16,12 @@ const ContentList = () => {
     return user.loginToggle;
   }, [user]);
 
-  // useEffect(() => {
-  //   if (user.loginToggle) {
-  //     axios.get('/trip/bookmark').then((res) => {
-  //       console.log('결과 : ' + res.data);
-  //       setBookmarks([...res.data]);
-  //     });
-  //   }
-  // }, []);
-
   return (
     <div className={styled.contentList}>
       {markers.map((marker, index) => (
         <SearchContent
           key={index}
-          placeResult={markers[0]}
+          placeResult={marker}
           userCheck={userLoginCheck}
         />
       ))}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Col, Row } from 'antd';
 import HeaderLayout from '@/components/layout/HeaderLayout';
 import MapSectionComponent from '@/components/layout/MapSectionComponent';
@@ -13,18 +13,19 @@ const Layout = () => {
   // const size = document.body;
   // console.log(size);
   const HEADER_SIZE = '100vh';
+  const style = useMemo(() => ({ height: HEADER_SIZE }), []);
 
   return (
     <>
       <Row>
         <Col span={16}>
-          <div style={{ height: HEADER_SIZE }}>
+          <div style={style}>
             <HeaderLayout />
             <MapSectionComponent />
           </div>
         </Col>
         <Col span={8}>
-          <div style={{ height: HEADER_SIZE }}>
+          <div style={style}>
             <RightSideContent />
           </div>
         </Col>

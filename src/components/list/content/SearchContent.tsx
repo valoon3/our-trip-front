@@ -1,5 +1,5 @@
 import styled from '@/styles/rightSideContent.module.scss';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
@@ -19,16 +19,12 @@ const SearchContent = ({ placeResult, userCheck }: Props) => {
   const searchService = new SearchService();
 
   // 이거 수정하자
-
-  const checkStart = useCallback(() => {
+  useEffect(() => {
     console.log('/trip/bookmark/' + placeResult.place_id);
     axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
-      console.log(res.data);
       setBookMarkStar(res.data);
     });
   }, []);
-
-  checkStart();
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
