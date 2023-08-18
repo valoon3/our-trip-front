@@ -8,22 +8,28 @@ import { GoogleMapPlaceResult } from '@/types/googleMap.type';
 
 type Props = {
   key: number;
-  placeResult: GoogleMapPlaceResult;
+  // TODO: 보낼 때와 받을 때의 타입 형식 정의가 달라서 에러가 발생한다. 벡엔드에서 수정해야할듯
+  placeResult: GoogleMapPlaceResult | any;
   userCheck: () => boolean;
+  contentType: string;
 };
 
 const START_SIZE = '22';
 
-const SearchContent = ({ placeResult, userCheck }: Props) => {
+const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
   const searchService = new SearchService();
 
-  // 이거 수정하자
+  // TODO: 이거 수정하자
   useEffect(() => {
-    console.log('/trip/bookmark/' + placeResult.place_id);
-    axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
-      setBookMarkStar(res.data);
-    });
+    if (contentType === 'search') {
+      console.log('/trip/bookmark/' + placeResult.place_id);
+      axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
+        setBookMarkStar(res.data);
+      });
+    } else if (contentType === 'bookmark') {
+      setBookMarkStar(true);
+    }
   }, []);
 
   const bookMarkStarHandler = useCallback(async () => {

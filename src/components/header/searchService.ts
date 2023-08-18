@@ -66,7 +66,6 @@ export class SearchService {
     try {
       const map = document.getElementById('searchDiv') as HTMLDivElement;
       const services = new PlacesService(map);
-      // services.findPlaceFromQuery(request, this.googleFindPlace);
       services.textSearch(request, this.googleFindPlace);
     } catch (err) {
       console.error('검색 에러 : ', err);

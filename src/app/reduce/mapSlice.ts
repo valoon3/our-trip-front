@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import { GoogleMapPlaceResult } from '@/types/googleMap.type';
+import { setContentType } from '@/app/reduce/contentSlice';
 
 interface mapState {
   lat: number;
@@ -105,6 +106,7 @@ export const setMarkerAndOptionsThunk = (
         })
       );
       dispatch(setMarkers(markerArray));
+      dispatch(setContentType('search'));
     });
   };
 };
