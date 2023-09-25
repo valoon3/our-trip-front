@@ -51,6 +51,11 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
       searchService.findPlaceDetail(placeResult.place_id);
   }, []);
 
+  const addPlanHandler = useCallback(async () => {
+    const res = await axios.post('/plan/', placeResult);
+    console.log(res);
+  }, [placeResult]);
+
   return (
     <div className={styled.searchContent}>
       <div className={styled.sort}>
@@ -79,6 +84,11 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
           onClick={detailOnClickHandler}
           style={{ cursor: 'pointer' }}
         />
+        {contentType !== 'plan' && (
+          <div onClick={addPlanHandler} style={{ cursor: 'pointer' }}>
+            일정 추가
+          </div>
+        )}
       </div>
     </div>
   );

@@ -36,6 +36,12 @@ const ContentList = () => {
     }
   }, [contentType]);
 
+  if (contentType === 'plan') {
+    axios.get('/plan/').then((res) => {
+      console.log(res);
+    });
+  }
+
   // default contentType: search
   return contentType === 'search' ? (
     <div className={styled.contentList}>
