@@ -4,12 +4,11 @@ import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
 import axios from 'axios';
-import { GoogleMapPlaceResult } from '@/types/googleMap.type';
 
 type Props = {
   key: number;
   // TODO: 보낼 때와 받을 때의 타입 형식 정의가 달라서 에러가 발생한다. 벡엔드에서 수정해야할듯
-  placeResult: GoogleMapPlaceResult | any;
+  placeResult: any;
   userCheck: () => boolean;
   contentType: string;
 };
@@ -27,14 +26,12 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
       axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
         setBookMarkStar(res.data);
       });
-    } else if (contentType === 'bookmark') {
-      setBookMarkStar(true);
     }
   }, []);
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
-      alert('로그인 후 이용해주세요.');
+      return alert('로그인 후 이용해주세요.');
     }
 
     bookMarkStar
@@ -59,7 +56,6 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   return (
     <div className={styled.searchContent}>
       <div className={styled.sort}>
-        <div style={{ cursor: 'pointer' }}>{placeResult.name}</div>
         {bookMarkStar ? (
           <BsStarFill
             onClick={bookMarkStarHandler}
@@ -74,6 +70,7 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
             style={{ cursor: 'pointer' }}
           />
         )}
+        <div style={{ cursor: 'pointer' }}>{placeResult.name}</div>
       </div>
 
       <hr />

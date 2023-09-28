@@ -5,6 +5,7 @@ import { RootState } from '@/app/store';
 import { useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { setBookmarks } from '@/app/reduce/contentSlice';
+import BookmarkContent from '@/components/list/content/bookmarkContent';
 
 type Props = {
   // contentType: string;
@@ -57,13 +58,20 @@ const ContentList = () => {
   ) : (
     <div className={styled.contentList}>
       {bookmarks.map((bookmark, index) => (
-        <SearchContent
+        <BookmarkContent
           key={index}
           placeResult={bookmark}
           userCheck={userLoginCheck}
-          contentType={contentType}
         />
       ))}
+      {/*{bookmarks.map((bookmark, index) => (*/}
+      {/*  <SearchContent*/}
+      {/*    key={index}*/}
+      {/*    placeResult={bookmark}*/}
+      {/*    userCheck={userLoginCheck}*/}
+      {/*    contentType={contentType}*/}
+      {/*  />*/}
+      {/*))}*/}
     </div>
   );
 };
