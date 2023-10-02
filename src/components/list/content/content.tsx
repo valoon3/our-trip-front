@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 import axios from 'axios';
 import styled from '@/styles/rightSideContent.module.scss';
 import { BsStar, BsStarFill } from 'react-icons/bs';
@@ -7,48 +9,50 @@ import { HiChevronDoubleDown } from 'react-icons/hi';
 type Props = {
   key: number;
   placeResult: any;
-  userCheck: () => boolean;
-  contentType: string;
 };
 
 const START_SIZE = '22';
 
-const BookmarkContent = ({ placeResult, userCheck, contentType }: Props) => {
-  const [bookMarkStar, setBookMarkStar] = useState(false);
+const Content = ({ placeResult }: Props) => {
+  const [bookMarkStar, setBookmarkStar] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
+  const contentType = useSelector(
+    (state: RootState) => state.content.contentType
+  );
 
-  // 북마크 별 관리
   const bookmarkStarHandler = useCallback(async () => {
-    if (!userCheck()) {
-      return alert('로그인 후 이용해주세요.');
-    } else {
-      bookMarkStar
-        ? await axios.delete('/trip/bookmark/' + placeResult.id).then((res) => {
-            console.log(res);
-          })
-        : await axios
-            .post('/trip/bookmark', {
-              placeResult,
-            })
-            .then((res) => {
-              console.log(res);
-            });
-    }
+    // 로그인 관리
+    if (!user.loginToggle) return alert('로그인 후 이용해 주세요.');
 
-    setBookMarkStar(!bookMarkStar);
-  }, [bookMarkStar, placeResult]);
+    bookMarkStar
+      ? await axios.delete('/trip/bookmark/' + placeResult.id).then((res) => {
+          console.log(res);
+        })
+      : await axios
+          .post('/trip/bookmark', {
+            placeResult,
+          })
+          .then((res) => {
+            console.log(res);
+          });
+    setBookmarkStar(!bookMarkStar);
+  }, [bookMarkStar, placeResult, user.loginToggle]);
 
   const addPlanHandler = useCallback(async () => {
-    console.log(placeResult);
-    axios.post('/plan', placeResult).then((res) => {
-      console.log(res);
-    });
-  }, [placeResult]);
+    if (contentType !== 'plan') {
+      // plan 추가
+      await axios.post('/plan', placeResult);
+    } else {
+      // plan 삭제
+      //
+    }
+  }, [placeResult, contentType]);
 
   useEffect(() => {
     axios.get('/trip/bookmarks').then((res) => {
-      setBookMarkStar(true);
+      setBookmarkStar(true);
     });
-  }, []);
+  }, [contentType]);
 
   return (
     <div className={styled.searchContent}>
@@ -76,11 +80,11 @@ const BookmarkContent = ({ placeResult, userCheck, contentType }: Props) => {
           style={{ cursor: 'pointer' }}
         />
         <div onClick={addPlanHandler} style={{ cursor: 'pointer' }}>
-          일정 추가
+          {contentType !== 'plan' ? '일정 추가' : '일정 삭제'}
         </div>
       </div>
     </div>
   );
 };
 
-export default BookmarkContent;
+export default Content;

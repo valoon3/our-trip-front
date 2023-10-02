@@ -2,10 +2,10 @@ import styled from '@/styles/rightSideContent.module.scss';
 import SearchContent from '@/components/list/content/SearchContent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { setBookmarks } from '@/app/reduce/contentSlice';
-import BookmarkContent from '@/components/list/content/bookmarkContent';
+import { setBookmarks, setPlans } from '@/app/reduce/contentSlice';
+import Content from '@/components/list/content/content';
 
 type Props = {
   // contentType: string;
@@ -15,9 +15,14 @@ const ContentList = () => {
   const { markers } = useSelector((state: RootState) => state.map);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  const { contentType, bookmarks } = useSelector(
+  const { contentType, bookmarks, plans } = useSelector(
     (state: RootState) => state.content
   );
+
+  const contents = useMemo(() => {
+    if (contentType === 'bookmark') return bookmarks;
+    else return plans;
+  }, [bookmarks, contentType, plans]);
 
   const userLoginCheck = useCallback(() => {
     if (!user.loginToggle) {
@@ -34,14 +39,15 @@ const ContentList = () => {
       axios.get('/trip/bookmarks').then((res) => {
         dispatch(setBookmarks(res.data));
       });
+    } else if (contentType === 'plan') {
+      // plan data 저장
+      axios.get('/plan').then((res) => {
+        if (res.data) {
+          dispatch(setPlans(res.data));
+        }
+      });
     }
   }, [contentType]);
-
-  if (contentType === 'plan') {
-    axios.get('/plan/').then((res) => {
-      console.log(res);
-    });
-  }
 
   // default contentType: search
   return contentType === 'search' ? (
@@ -57,21 +63,21 @@ const ContentList = () => {
     </div>
   ) : (
     <div className={styled.contentList}>
-      {bookmarks.map((bookmark, index) => (
-        <BookmarkContent
-          key={index}
-          placeResult={bookmark}
-          userCheck={userLoginCheck}
-        />
-      ))}
-      {/*{bookmarks.map((bookmark, index) => (*/}
-      {/*  <SearchContent*/}
-      {/*    key={index}*/}
-      {/*    placeResult={bookmark}*/}
-      {/*    userCheck={userLoginCheck}*/}
-      {/*    contentType={contentType}*/}
-      {/*  />*/}
-      {/*))}*/}
+      {contentType === 'bookmark' ? (
+        contents.map((bookmark, index) => (
+          <Content key={index} placeResult={bookmark} />
+        ))
+      ) : contents.length === 0 ? (
+        <div>계획 추가하기</div>
+      ) : (
+        <div>셀렉트 박스</div>
+      )}
+      {/*{contentType === 'plan' && contents.length === 0 ? (*/}
+      {/*  <div style={{ backgroundColor: 'blue' }}>계획 추가하기</div>*/}
+      {/*) : (*/}
+      {/*  */}
+      {/*)}*/}
+      {}
     </div>
   );
 };

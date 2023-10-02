@@ -6,11 +6,13 @@ type ContentType = 'search' | 'bookmark' | 'plan' | string;
 interface contentState {
   contentType: ContentType;
   bookmarks: Array<GoogleMapPlaceResult>;
+  plans: any[];
 }
 
 const initialState = {
   contentType: 'search',
   bookmarks: [],
+  plans: [],
 };
 
 const reducers = {
@@ -20,6 +22,9 @@ const reducers = {
   setBookmarks: (state: contentState, action: any) => {
     state.bookmarks = action.payload;
   },
+  setPlans: (state: contentState, action: any) => {
+    state.plans = action.payload;
+  },
 };
 
 export const contentSlice = createSlice({
@@ -28,6 +33,6 @@ export const contentSlice = createSlice({
   reducers,
 });
 
-export const { setContentType, setBookmarks } = contentSlice.actions;
+export const { setContentType, setBookmarks, setPlans } = contentSlice.actions;
 
 export default contentSlice.reducer;
