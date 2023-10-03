@@ -2,10 +2,12 @@ import styled from '@/styles/rightSideContent.module.scss';
 import SearchContent from '@/components/list/content/SearchContent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { setBookmarks, setPlans } from '@/app/reduce/contentSlice';
 import Content from '@/components/list/content/content';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
 
 type Props = {
   // contentType: string;
@@ -18,6 +20,15 @@ const ContentList = () => {
   const { contentType, bookmarks, plans } = useSelector(
     (state: RootState) => state.content
   );
+
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   const contents = useMemo(() => {
     if (contentType === 'bookmark') return bookmarks;
@@ -68,16 +79,30 @@ const ContentList = () => {
           <Content key={index} placeResult={bookmark} />
         ))
       ) : contents.length === 0 ? (
-        <div>계획 추가하기</div>
+        <div>
+          <h1>출발날짜와 도착날짜 선택</h1>
+          <div>
+            <h1>출발날짜와 도착날짜 선택</h1>
+            <DatePicker
+              selected={startDate}
+              onChange={handleDateChange}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
+              locale="ko" // 한국어 로케일 사용
+              dateFormat="yyyy-MM-dd"
+            />
+            <p>
+              출발날짜:{' '}
+              {startDate ? startDate.toDateString() : '날짜를 선택하세요'}{' '}
+              <br />
+              도착날짜: {endDate ? endDate.toDateString() : '날짜를 선택하세요'}
+            </p>
+          </div>
+        </div>
       ) : (
         <div>셀렉트 박스</div>
       )}
-      {/*{contentType === 'plan' && contents.length === 0 ? (*/}
-      {/*  <div style={{ backgroundColor: 'blue' }}>계획 추가하기</div>*/}
-      {/*) : (*/}
-      {/*  */}
-      {/*)}*/}
-      {}
     </div>
   );
 };
