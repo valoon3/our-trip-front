@@ -21,6 +21,14 @@ const ContentList = () => {
     (state: RootState) => state.content
   );
 
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const toggleDataPicker = useCallback(() => {
+    setShowDatePicker(!showDatePicker);
+  }, [showDatePicker]);
+  const [planTitle, setPlanTitle] = useState<string>('');
+  const planTitleHandler = useCallback((e: any) => {
+    setPlanTitle(e.target.value);
+  }, []);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -29,6 +37,15 @@ const ContentList = () => {
     setStartDate(start);
     setEndDate(end);
   };
+
+  const submitOnClick = useCallback(async () => {
+    const result = {
+      title: planTitle,
+      startDate,
+      endDate,
+    };
+    const res = await axios.post('/plan', result);
+  }, [planTitle, startDate, endDate]);
 
   const contents = useMemo(() => {
     if (contentType === 'bookmark') return bookmarks;
@@ -80,18 +97,25 @@ const ContentList = () => {
         ))
       ) : contents.length === 0 ? (
         <div>
-          <h1>출발날짜와 도착날짜 선택</h1>
           <div>
+            제목 선택 : <input type="text" onChange={planTitleHandler} />
+            {planTitle}
             <h1>출발날짜와 도착날짜 선택</h1>
-            <DatePicker
-              selected={startDate}
-              onChange={handleDateChange}
-              startDate={startDate}
-              endDate={endDate}
-              selectsRange
-              locale="ko" // 한국어 로케일 사용
-              dateFormat="yyyy-MM-dd"
-            />
+            <button onClick={toggleDataPicker} style={{ color: 'blue' }}>
+              {showDatePicker ? '닫기' : '날짜 선택'}
+            </button>
+            {showDatePicker && (
+              <DatePicker
+                selected={startDate}
+                onChange={handleDateChange}
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange
+                locale="ko" // 한국어 로케일 사용
+                dateFormat="yyyy-MM-dd"
+                inline
+              />
+            )}
             <p>
               출발날짜:{' '}
               {startDate ? startDate.toDateString() : '날짜를 선택하세요'}{' '}
@@ -99,6 +123,7 @@ const ContentList = () => {
               도착날짜: {endDate ? endDate.toDateString() : '날짜를 선택하세요'}
             </p>
           </div>
+          <button onClick={submitOnClick}>제출</button>
         </div>
       ) : (
         <div>셀렉트 박스</div>
