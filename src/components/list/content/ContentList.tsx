@@ -41,8 +41,8 @@ const ContentList = () => {
   const submitOnClick = useCallback(async () => {
     const result = {
       title: planTitle,
-      startDate,
-      endDate,
+      startPlanDate: startDate,
+      endPlanDate: endDate,
     };
     const res = await axios.post('/plan', result);
   }, [planTitle, startDate, endDate]);
