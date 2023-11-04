@@ -4,6 +4,8 @@ import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 
 type Props = {
   key: number;
@@ -18,16 +20,17 @@ const START_SIZE = '22';
 const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
   const searchService = new SearchService();
+  const userToggle = useSelector((state: RootState) => state.user.loginToggle);
 
   // TODO: 이거 수정하자
   useEffect(() => {
-    if (contentType === 'search') {
+    if (contentType === 'search' && userToggle) {
       console.log('/trip/bookmark/' + placeResult.place_id);
       axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
         setBookMarkStar(res.data);
       });
     }
-  }, []);
+  }, [userToggle, contentType]);
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
