@@ -1,11 +1,17 @@
 FROM node:20-alpine
 
-WORKDIR /app
+#WORKDIR /app
+WORKDIR /our-trip/our-trip-front
 
-COPY package.json ./
+#COPY ./package.json ./
+COPY ./.env ./
+COPY . .
 
 RUN npm install
+RUN npm run build
 
-COPY ./ ./
+EXPOSE 80:80
+
+#COPY ./ ./
 
 CMD ["npm", "run", "start"]
