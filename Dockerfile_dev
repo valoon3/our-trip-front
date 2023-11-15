@@ -4,14 +4,15 @@ FROM node:20-alpine
 WORKDIR /our-trip/our-trip-front
 
 #COPY ./package.json ./
-COPY ./.env ./
+#COPY ./.env ./
 COPY . .
 
 RUN npm install
 RUN npm run build
 
-EXPOSE 80:80
+EXPOSE 80:80/tcp
 
-#COPY ./ ./
+COPY ./ ./
 
+#CMD ["npm", "run", "build"]
 CMD ["npm", "run", "start"]
