@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 80",
-    "start:prod": "pm2 --name our-trip-fornt start npm -- start",
+    "start": "next start -- -p 80",
+    "start:prod": "pm2 start npm --name 'our-trip-fornt' -- start",
+    "start:pm2": "pm2-runtime start npm -- run start",
     "lint": "next lint"
   },
   "dependencies": {
