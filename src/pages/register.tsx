@@ -10,6 +10,7 @@ const Register = () => {
   const [username, setUserName] = useState('');
 
   const [errors, setErrors] = useState<any>({});
+  const [emailError, setEmailError] = useState<string>('');
 
   let router = useRouter();
 
@@ -23,16 +24,11 @@ const Register = () => {
         name: username,
       });
 
-      console.log(data.emailError);
-
-      if (data.emailError) {
-        setErrors(data);
-      } else {
-        await router.push('/login');
-      }
+      await router.push('/login');
     } catch (err: any) {
-      console.log(err);
-      setErrors(err.response.data || {});
+      console.log('에러', err.response);
+      setEmailError(err.response.data.message);
+      // setErrors(err.response.data.message || {});
     }
   };
 
@@ -47,7 +43,7 @@ const Register = () => {
                 placeholder={'Email'}
                 value={email}
                 setValue={setEmail}
-                error={errors.emailError}
+                error={emailError}
               />
               <InputGroup
                 placeholder={'Password'}
