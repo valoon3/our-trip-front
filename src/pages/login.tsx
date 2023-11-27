@@ -4,14 +4,17 @@ import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '@/app/reduce/userSlice';
+import { setUserInfo } from '@/app/reduce/userSlice';
 
 const Login = () => {
   let router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<{
+    emailError?: string;
+    passwordError?: string;
+  }>({});
 
   const test = useSelector((state: any) => state.user);
   const { loginToggle, userInfo } = test;
@@ -26,17 +29,29 @@ const Login = () => {
         password,
       });
 
+      console.log(res);
+
       if (!res.data.loginError) {
         console.log('로그인');
-        localStorage.setItem('loginInfo', 'true');
-        dispatch(login());
+        // localStorage.setItem('loginInfo', 'true');
+        // dispatch(login());
+        dispatch(
+          setUserInfo({
+            name: res.data.name,
+            email: res.data.email,
+          })
+        );
         return await router.push('/');
       }
+    } catch (err: any) {
+      const error = err.response.data.error;
 
-      setErrors({ emailError: res.data.errorMessage });
-    } catch (err) {
-      console.error(err);
-      // setErrors(errors.response.data);
+      const errorObject: { emailError?: string; passwordError?: string } = {};
+      Object.keys(error).forEach((key: string) => {
+        if (key === 'emailError' || key === 'passwordError')
+          errorObject[`${key}`] = error[key];
+      });
+      setErrors(errorObject);
     }
   };
 
