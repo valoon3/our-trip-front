@@ -30,7 +30,7 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
         setBookMarkStar(res.data);
       });
     }
-  }, [userToggle, contentType]);
+  }, [userToggle, contentType, placeResult]);
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
