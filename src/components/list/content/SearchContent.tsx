@@ -44,7 +44,7 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
         });
 
     setBookMarkStar(!bookMarkStar);
-  }, [bookMarkStar]);
+  }, [bookMarkStar, userCheck, placeResult]);
 
   const detailOnClickHandler = useCallback(() => {
     if (typeof placeResult.place_id === 'string')
