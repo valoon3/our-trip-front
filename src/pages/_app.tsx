@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as process from 'process';
 import { Provider } from 'react-redux';
 import { store } from '@/app/store';
+import '@/styles/popup.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
   if (process.env.NODE_ENV === 'development') {
