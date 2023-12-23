@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './reduce/userSlice';
 import mapReducer from './reduce/mapSlice';
 import contentReducer from './reduce/contentSlice';
+import popupReducer from './reduce/popupSlice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     user: userReducer,
     map: mapReducer,
     content: contentReducer,
+    popup: popupReducer,
   },
   // middleware: (getDefaultMiddleware) =>
   //   getDefaultMiddleware().concat(loggerMiddleware),
