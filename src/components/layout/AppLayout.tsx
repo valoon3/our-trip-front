@@ -36,7 +36,6 @@ const Layout = () => {
           </div>
         </Col>
       </Row>
-      {/*<CreateTripPlan isPopupOpen={isPopupOpen} />*/}
     </>
   );
 };
