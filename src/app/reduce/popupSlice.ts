@@ -5,12 +5,15 @@ interface popupSliceState {
 }
 
 const initialState: popupSliceState = {
-  isPopupOpen: false,
+  isPopupOpen: true,
 };
 
 const reducers = {
-  setIsPopupOpen: (state: popupSliceState, action: PayloadAction<void>) => {
-    state.isPopupOpen = !state.isPopupOpen;
+  setIsPopupOpen: (state: popupSliceState, action: PayloadAction<any>) => {
+    state.isPopupOpen = true;
+  },
+  setIsPopupClose: (state: popupSliceState, action: PayloadAction<any>) => {
+    state.isPopupOpen = false;
   },
 };
 
@@ -20,6 +23,6 @@ export const popupSlice = createSlice({
   reducers,
 });
 
-export const { setIsPopupOpen } = popupSlice.actions;
+export const { setIsPopupOpen, setIsPopupClose } = popupSlice.actions;
 
 export default popupSlice.reducer;

@@ -8,6 +8,7 @@ import { setBookmarks, setPlans } from '@/app/reduce/contentSlice';
 import Content from '@/components/list/content/content';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import CreateTripPlan from '@/components/popup/tripPlanPopup/createTripPlan';
 
 type Props = {
   // contentType: string;
@@ -77,6 +78,11 @@ const ContentList = () => {
     }
   }, [contentType]);
 
+  const [isClicked, setIsClicked] = useState(false);
+  const createNewPlanPopup = useCallback(() => {
+    setIsClicked(true);
+  }, []);
+
   // default contentType: search
   return contentType === 'search' ? (
     <div className={styled.contentList}>
@@ -98,6 +104,14 @@ const ContentList = () => {
       ) : contents.length === 0 ? (
         <div>
           <div>
+            <button onClick={createNewPlanPopup}>팝업 생성</button>
+            {isClicked && (
+              <CreateTripPlan
+                isPopupOpen={isClicked}
+                setIsPopupOpen={setIsClicked}
+              />
+            )}
+            <br />
             제목 선택 : <input type="text" onChange={planTitleHandler} />
             {planTitle}
             <h1>출발날짜와 도착날짜 선택</h1>
