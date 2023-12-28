@@ -3,8 +3,6 @@ import { Col, Row } from 'antd';
 import HeaderLayout from '@/components/layout/HeaderLayout';
 import MapSectionComponent from '@/components/layout/MapSectionComponent';
 import RightSideContent from '@/components/list/RightSideContent';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
 
 type Props = {
   // children: React.ReactElement
@@ -16,10 +14,6 @@ const Layout = () => {
   // console.log(size);
   const HEADER_SIZE = '100vh';
   const style = useMemo(() => ({ height: HEADER_SIZE }), []);
-
-  const isPopupOpen = useSelector(
-    (state: RootState) => state.popup.isPopupOpen
-  );
 
   return (
     <>

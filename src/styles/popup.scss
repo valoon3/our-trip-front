@@ -10,7 +10,10 @@
   display: flex;
 
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
+
+  flex-direction: column;
+  justify-content: space-between;
 
   z-index: 101; /* 항상 최상위에 띄우기 */
 }
@@ -26,6 +29,10 @@
   box-sizing: border-box; // padding을 포함한 크기 계산
 }
 
+.modal-input {
+  height: 85%;
+}
+
 .close-button {
   background-color: #ffcc00; /* 노란색 */
   color: #fff;
@@ -33,4 +40,46 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* 버튼과 상단 간격 조절 */
+}
+
+.save-button,
+.cancel-button {
+  /* 공통 버튼 스타일 */
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.save-button {
+  /* 저장 버튼 스타일 */
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel-button {
+  /* 취소 버튼 스타일 */
+  background-color: #f44336;
+  color: white;
+}
+
+.save-button:hover,
+.cancel-button:hover {
+  /* 버튼 호버 스타일 */
+  background-color: #45a049; /* 저장 버튼의 경우 더 진한 녹색 */
+}
+
+.cancel-button:hover {
+  /* 취소 버튼의 경우 더 진한 빨간색 */
+  background-color: #d32f2f;
 }
