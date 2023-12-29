@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import ko from 'date-fns/locale/ko';
 
 interface Props {
   isPopupOpen: boolean;
@@ -6,21 +8,20 @@ interface Props {
 }
 
 interface TravelPlan {
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  description?: string;
+  title: string; // 여행 제목
+  description?: string; // 간단한 설명
 }
 
 const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const closePopup = () => {
     setIsPopupOpen(false);
   };
 
   const [travelPlanObject, setTravelPlanObject] = useState<TravelPlan>({
     title: '',
-    startDate: new Date(),
-    endDate: new Date(),
     description: '',
   });
   const travelObjectHandler = useCallback(
@@ -45,6 +46,13 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
     closePopup(); // 저장 후 모달을 닫을 수 있도록
   };
 
+  const handleDatePicker = (dates: [Date | null, Date | null]) => {
+    console.log(dates);
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
+
   const handleInSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 모달 바깥 클릭이 아니면 모달을 닫지 않음
     e.stopPropagation();
@@ -55,17 +63,44 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
       {isPopupOpen && (
         <div className="modal-overlay" onClick={closePopup}>
           <div className="modal-content" onClick={handleInSideClick}>
-            <div className="modal-input">
-              <p>여행 제목 : </p>
+            <div className="input-container">
+              <label className="input-label" htmlFor="travelTitle">
+                여행 제목 :
+              </label>
               <input
                 type="text"
                 id="title"
                 name="title"
                 value={travelPlanObject.title}
                 onChange={travelObjectHandler}
+                className="input-field"
               />
-              <p>여행 일정</p>
-              <p></p>
+
+              <label className="input-label" htmlFor="travelTitle">
+                여행 메모 :
+              </label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                value={travelPlanObject.description}
+                onChange={travelObjectHandler}
+                className="input-field"
+              />
+
+              <div>
+                <DatePicker
+                  selected={startDate}
+                  onChange={handleDatePicker}
+                  startDate={startDate}
+                  endDate={endDate}
+                  selectsRange
+                  locale={ko} // 한국어 로케일 사용
+                  dateFormat="yyyy-MM-dd"
+                  inline
+                  monthsShown={2}
+                />
+              </div>
             </div>
 
             <div className="button-container">

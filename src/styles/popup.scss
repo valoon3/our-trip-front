@@ -29,8 +29,32 @@
   box-sizing: border-box; // padding을 포함한 크기 계산
 }
 
-.modal-input {
+.input-container {
   height: 85%;
+  /* 공통 입력 필드 스타일 */
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  /* 입력 필드 라벨 스타일 */
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  width: 100px;
+}
+
+.input-field {
+  /* 입력 필드 스타일 */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: calc(100% - 20px); /* 전체 너비에서 좌우 패딩 제외 */
+  box-sizing: border-box;
+  margin-top: 5px; /* 라벨과 입력 필드 사이 간격 조절 */
 }
 
 .close-button {

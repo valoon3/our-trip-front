@@ -34,6 +34,7 @@ const ContentList = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
+    console.log(dates);
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
@@ -125,7 +126,7 @@ const ContentList = () => {
                 startDate={startDate}
                 endDate={endDate}
                 selectsRange
-                locale="ko" // 한국어 로케일 사용
+                // locale="ko" // 한국어 로케일 사용
                 dateFormat="yyyy-MM-dd"
                 inline
               />
