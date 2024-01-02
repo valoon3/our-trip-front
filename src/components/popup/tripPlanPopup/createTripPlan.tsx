@@ -13,7 +13,7 @@ interface TravelPlan {
 }
 
 const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const closePopup = () => {
@@ -40,14 +40,24 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
     // 이 부분은 실제 백엔드 통신 코드로 교체되어야 합니다.
     console.log('여행 정보:', travelPlanObject);
 
+    if (travelPlanObject.title === '') {
+      alert('여행 제목을 입력해주세요');
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      alert('여행 날짜를 선택해주세요');
+      return;
+    }
+
     // 여행 정보를 서버로 전송하는 코드를 추가하세요.
     // axios 또는 fetch를 사용하여 백엔드와 통신하는 코드를 작성해야 합니다.
+    // axios.post('/plan');
 
     closePopup(); // 저장 후 모달을 닫을 수 있도록
   };
 
   const handleDatePicker = (dates: [Date | null, Date | null]) => {
-    console.log(dates);
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
