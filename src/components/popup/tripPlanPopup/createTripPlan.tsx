@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
+import axios from 'axios';
 
 interface Props {
   isPopupOpen: boolean;
@@ -10,6 +11,8 @@ interface Props {
 interface TravelPlan {
   title: string; // 여행 제목
   description?: string; // 간단한 설명
+  startDate?: Date | null; // 여행 시작 날짜
+  endDate?: Date | null; // 여행 시작 날짜
 }
 
 const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
@@ -23,7 +26,10 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
   const [travelPlanObject, setTravelPlanObject] = useState<TravelPlan>({
     title: '',
     description: '',
+    startDate: null, // 여행 시작 날짜
+    endDate: null, // 여행 시작 날짜
   });
+
   const travelObjectHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
@@ -50,15 +56,34 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
       return;
     }
 
+    // setTravelPlanObject((pre) => {
+    //   return {
+    //     ...pre,
+    //     startDate,
+    //     endDate,
+    //   };
+    // });
+
+    console.log('여행 정보:', { ...travelPlanObject, startDate, endDate });
+
     // 여행 정보를 서버로 전송하는 코드를 추가하세요.
     // axios 또는 fetch를 사용하여 백엔드와 통신하는 코드를 작성해야 합니다.
-    // axios.post('/plan');
+    axios
+      .post('/plan', travelPlanObject)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     closePopup(); // 저장 후 모달을 닫을 수 있도록
   };
 
   const handleDatePicker = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
+    console.log('info : ', start, end);
+
     setStartDate(start);
     setEndDate(end);
   };
@@ -104,7 +129,7 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
                   onChange={handleDatePicker}
                   startDate={startDate}
                   endDate={endDate}
-                  selectsRange
+                  selectsRange={true}
                   locale={ko} // 한국어 로케일 사용
                   dateFormat="yyyy-MM-dd"
                   inline
