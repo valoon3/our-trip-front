@@ -8,7 +8,7 @@ interface Props {
   setIsPopupOpen: (isPopupOpen: boolean) => void;
 }
 
-interface TravelPlan {
+interface TravelPlanI {
   title: string; // 여행 제목
   description?: string; // 간단한 설명
   startDate?: Date | null; // 여행 시작 날짜
@@ -23,7 +23,7 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
     setIsPopupOpen(false);
   };
 
-  const [travelPlanObject, setTravelPlanObject] = useState<TravelPlan>({
+  const [travelPlanObject, setTravelPlanObject] = useState<TravelPlanI>({
     title: '',
     description: '',
     startDate: null, // 여행 시작 날짜
@@ -41,10 +41,9 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
     []
   );
 
-  const handleSaveButtonClick = () => {
+  const handleSaveButtonClick = useCallback(() => {
     // 여기에서 travelData를 서버에 전달하면 됩니다.
     // 이 부분은 실제 백엔드 통신 코드로 교체되어야 합니다.
-    console.log('여행 정보:', travelPlanObject);
 
     if (travelPlanObject.title === '') {
       alert('여행 제목을 입력해주세요');
@@ -56,20 +55,15 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
       return;
     }
 
-    // setTravelPlanObject((pre) => {
-    //   return {
-    //     ...pre,
-    //     startDate,
-    //     endDate,
-    //   };
-    // });
-
-    console.log('여행 정보:', { ...travelPlanObject, startDate, endDate });
+    const travelPlanResult: TravelPlanI = {
+      ...travelPlanObject,
+      startDate,
+      endDate,
+    };
 
     // 여행 정보를 서버로 전송하는 코드를 추가하세요.
-    // axios 또는 fetch를 사용하여 백엔드와 통신하는 코드를 작성해야 합니다.
     axios
-      .post('/plan', travelPlanObject)
+      .post('/plan', travelPlanResult)
       .then((res) => {
         console.log(res);
       })
@@ -78,15 +72,27 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
       });
 
     closePopup(); // 저장 후 모달을 닫을 수 있도록
-  };
+  }, [travelPlanObject, startDate, endDate]);
 
-  const handleDatePicker = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    console.log('info : ', start, end);
+  const handleDateChange = useCallback(
+    (dates: [Date | null, Date | null]) => {
+      const [start, end] = dates;
+      console.log('info : ', start, end);
 
-    setStartDate(start);
-    setEndDate(end);
-  };
+      setStartDate(start);
+      setEndDate(end);
+
+      console.log('startDate : ', startDate);
+      console.log('endDate : ', endDate);
+
+      // setTravelPlanObject((pre) => ({
+      //   ...pre,
+      //   startDate,
+      //   endDate,
+      // }));
+    },
+    [startDate, endDate]
+  );
 
   const handleInSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 모달 바깥 클릭이 아니면 모달을 닫지 않음
@@ -123,19 +129,19 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
                 className="input-field"
               />
 
-              <div>
-                <DatePicker
-                  selected={startDate}
-                  onChange={handleDatePicker}
-                  startDate={startDate}
-                  endDate={endDate}
-                  selectsRange={true}
-                  locale={ko} // 한국어 로케일 사용
-                  dateFormat="yyyy-MM-dd"
-                  inline
-                  monthsShown={2}
-                />
-              </div>
+              {/*<div>*/}
+              <DatePicker
+                selected={startDate}
+                onChange={handleDateChange}
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange={true}
+                locale={ko} // 한국어 로케일 사용
+                dateFormat="yyyy-MM-dd"
+                inline
+                // monthsShown={2}
+              />
+              {/*</div>*/}
             </div>
 
             <div className="button-container">
