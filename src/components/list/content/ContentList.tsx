@@ -4,15 +4,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { setBookmarks, setPlans } from '@/app/reduce/contentSlice';
+import { setBookmarks } from '@/app/reduce/contentSlice';
 import Content from '@/components/list/content/content';
 import 'react-datepicker/dist/react-datepicker.css';
-import DatePicker from 'react-datepicker';
 import CreateTripPlan from '@/components/popup/tripPlanPopup/createTripPlan';
 
 type Props = {
   // contentType: string;
 };
+
+interface TravelPlanI {
+  title: string; // 여행 제목
+  description?: string; // 간단한 설명
+  startDate?: Date | null; // 여행 시작 날짜
+  endDate?: Date | null; // 여행 시작 날짜
+  createdAt?: Date | null; // 여행 시작 날짜
+  updatedAt?: Date | null; // 여행 시작 날짜
+}
 
 const ContentList = () => {
   const { markers } = useSelector((state: RootState) => state.map);
@@ -22,32 +30,11 @@ const ContentList = () => {
     (state: RootState) => state.content
   );
 
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const toggleDataPicker = useCallback(() => {
-    setShowDatePicker(!showDatePicker);
-  }, [showDatePicker]);
   const [planTitle, setPlanTitle] = useState<string>('');
+  const [planList, setPlanList] = useState<TravelPlanI[]>([]);
   const planTitleHandler = useCallback((e: any) => {
     setPlanTitle(e.target.value);
   }, []);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-
-  const handleDateChange = (dates: [Date | null, Date | null]) => {
-    console.log(dates);
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
-
-  const submitOnClick = useCallback(async () => {
-    const result = {
-      title: planTitle,
-      startPlanDate: startDate,
-      endPlanDate: endDate,
-    };
-    const res = await axios.post('/plan', result);
-  }, [planTitle, startDate, endDate]);
 
   const contents = useMemo(() => {
     if (contentType === 'bookmark') return bookmarks;
@@ -73,11 +60,12 @@ const ContentList = () => {
       // plan data 저장
       axios.get('/plan').then((res) => {
         if (res.data) {
-          dispatch(setPlans(res.data));
+          const result = res.data;
+          setPlanList(result);
         }
       });
     }
-  }, [contentType]);
+  }, [contentType, dispatch]);
 
   const [isClicked, setIsClicked] = useState(false);
   const createNewPlanPopup = useCallback(() => {
@@ -105,8 +93,22 @@ const ContentList = () => {
       ) : contents.length === 0 ? (
         <div>
           <div>
-            <button onClick={createNewPlanPopup}>팝업 생성</button>
-            {isClicked && (
+            {!planList.length ? (
+              <div>
+                <button
+                  onClick={createNewPlanPopup}
+                  className={styled.planContentList}
+                >
+                  일정 생성
+                </button>
+                {isClicked && (
+                  <CreateTripPlan
+                    isPopupOpen={isClicked}
+                    setIsPopupOpen={setIsClicked}
+                  />
+                )}
+              </div>
+            ) : (
               <CreateTripPlan
                 isPopupOpen={isClicked}
                 setIsPopupOpen={setIsClicked}
@@ -115,30 +117,7 @@ const ContentList = () => {
             <br />
             제목 선택 : <input type="text" onChange={planTitleHandler} />
             {planTitle}
-            <h1>출발날짜와 도착날짜 선택</h1>
-            <button onClick={toggleDataPicker} style={{ color: 'blue' }}>
-              {showDatePicker ? '닫기' : '날짜 선택'}
-            </button>
-            {showDatePicker && (
-              <DatePicker
-                selected={startDate}
-                onChange={handleDateChange}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                // locale="ko" // 한국어 로케일 사용
-                dateFormat="yyyy-MM-dd"
-                inline
-              />
-            )}
-            <p>
-              출발날짜:{' '}
-              {startDate ? startDate.toDateString() : '날짜를 선택하세요'}{' '}
-              <br />
-              도착날짜: {endDate ? endDate.toDateString() : '날짜를 선택하세요'}
-            </p>
           </div>
-          <button onClick={submitOnClick}>제출</button>
         </div>
       ) : (
         <div>셀렉트 박스</div>
