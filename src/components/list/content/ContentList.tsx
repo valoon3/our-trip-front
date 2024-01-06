@@ -58,14 +58,20 @@ const ContentList = () => {
       });
     } else if (contentType === 'plan') {
       // plan data 저장
-      axios.get('/plan').then((res) => {
-        if (res.data) {
-          const result = res.data;
-          setPlanList(result);
-        }
-      });
+      axios
+        .get('/plan')
+        .then((res) => {
+          if (res.data) {
+            const result = res.data;
+            console.log(result);
+            setPlanList(result);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
-  }, [contentType, dispatch]);
+  }, [contentType]);
 
   const [isClicked, setIsClicked] = useState(false);
   const createNewPlanPopup = useCallback(() => {
@@ -101,21 +107,40 @@ const ContentList = () => {
                 >
                   일정 생성
                 </button>
+                {/*팝업 생성 버튼*/}
                 {isClicked && (
                   <CreateTripPlan
                     isPopupOpen={isClicked}
                     setIsPopupOpen={setIsClicked}
+                    setPlanList={setPlanList}
                   />
                 )}
               </div>
             ) : (
-              <CreateTripPlan
-                isPopupOpen={isClicked}
-                setIsPopupOpen={setIsClicked}
-              />
+              <div>
+                <button
+                  onClick={createNewPlanPopup}
+                  className={styled.planContentList}
+                >
+                  일정 생성
+                </button>
+                {/*팝업 생성 버튼*/}
+                {isClicked && (
+                  <CreateTripPlan
+                    isPopupOpen={isClicked}
+                    setIsPopupOpen={setIsClicked}
+                    setPlanList={setPlanList}
+                  />
+                )}
+                <p>계획이 있음</p>
+              </div>
+              // <CreateTripPlan
+              //   isPopupOpen={isClicked}
+              //   setIsPopupOpen={setIsClicked}
+              // />
             )}
             <br />
-            제목 선택 : <input type="text" onChange={planTitleHandler} />
+            {/* 여기에 새로운 일정 카운터 추가*/}
             {planTitle}
           </div>
         </div>

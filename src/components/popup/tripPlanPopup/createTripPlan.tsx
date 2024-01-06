@@ -6,6 +6,7 @@ import axios from 'axios';
 interface Props {
   isPopupOpen: boolean;
   setIsPopupOpen: (isPopupOpen: boolean) => void;
+  setPlanList: (planList: TravelPlanI[]) => void;
 }
 
 interface TravelPlanI {
@@ -15,7 +16,11 @@ interface TravelPlanI {
   endDate?: Date | null; // 여행 시작 날짜
 }
 
-const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
+const CreateTripPlan = ({
+  isPopupOpen,
+  setIsPopupOpen,
+  setPlanList,
+}: Props) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -65,7 +70,8 @@ const CreateTripPlan = ({ isPopupOpen, setIsPopupOpen }: Props) => {
     axios
       .post('/plan', travelPlanResult)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setPlanList([res.data]);
       })
       .catch((err) => {
         console.error(err);
