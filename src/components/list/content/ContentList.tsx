@@ -8,19 +8,12 @@ import { setBookmarks } from '@/app/reduce/contentSlice';
 import Content from '@/components/list/content/content';
 import 'react-datepicker/dist/react-datepicker.css';
 import CreateTripPlan from '@/components/popup/tripPlanPopup/createTripPlan';
+import ContentPlanListDetail from '@/components/list/content/ContentPlanListDetail';
+import { TravelPlanI } from '@/types/TravelPlan.type';
 
 type Props = {
   // contentType: string;
 };
-
-interface TravelPlanI {
-  title: string; // 여행 제목
-  description?: string; // 간단한 설명
-  startDate?: Date | null; // 여행 시작 날짜
-  endDate?: Date | null; // 여행 시작 날짜
-  createdAt?: Date | null; // 여행 시작 날짜
-  updatedAt?: Date | null; // 여행 시작 날짜
-}
 
 const ContentList = () => {
   const { markers } = useSelector((state: RootState) => state.map);
@@ -132,7 +125,7 @@ const ContentList = () => {
                     setPlanList={setPlanList}
                   />
                 )}
-                <p>계획이 있음</p>
+                <ContentPlanListDetail contentList={planList} />
               </div>
               // <CreateTripPlan
               //   isPopupOpen={isClicked}

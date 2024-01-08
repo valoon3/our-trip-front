@@ -2,18 +2,12 @@ import { useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
 import axios from 'axios';
+import { TravelPlanI } from '@/types/TravelPlan.type';
 
 interface Props {
   isPopupOpen: boolean;
   setIsPopupOpen: (isPopupOpen: boolean) => void;
   setPlanList: (planList: TravelPlanI[]) => void;
-}
-
-interface TravelPlanI {
-  title: string; // 여행 제목
-  description?: string; // 간단한 설명
-  startDate?: Date | null; // 여행 시작 날짜
-  endDate?: Date | null; // 여행 시작 날짜
 }
 
 const CreateTripPlan = ({
