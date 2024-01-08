@@ -1,6 +1,7 @@
 import { Select, SelectProps } from 'antd';
 import { TravelPlanI } from '@/types/TravelPlan.type';
 import { useState } from 'react';
+import PlanDetailRender from '@/components/list/content/PlanDetailRender';
 
 interface Props {
   contentList: TravelPlanI[];
@@ -13,6 +14,7 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
     console.log(title, 'options : ', options);
     const plan = contentList[options.index];
     setSelectedTravelPlan(plan);
+    console.log(plan.startDate?.getDate());
   };
 
   const options: SelectProps<{ value: string }>['options'] = contentList.map(
@@ -22,11 +24,6 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
       index,
     })
   );
-
-  // useEffect(() => {
-  //   console.log('contentList : ', contentList);
-  //   console.log('options : ', options);
-  // }, []);
 
   return (
     <div>
@@ -47,6 +44,11 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
           options={options}
           // style={{ marginTop: '10px' }}
         />
+      </div>
+      <div className="planDetail">
+        {selectedTravelPlan && (
+          <PlanDetailRender selectedTravelPlan={selectedTravelPlan} />
+        )}
       </div>
     </div>
   );

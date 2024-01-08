@@ -56,8 +56,14 @@ const ContentList = () => {
         .then((res) => {
           if (res.data) {
             const result = res.data;
+            const o: TravelPlanI[] = result.map((plan: TravelPlanI) => {
+              plan.startDate =
+                plan.startDate && new Date(plan.startDate.toString());
+              plan.endDate = plan.endDate && new Date(plan.endDate.toString());
+              return plan;
+            });
             console.log(result);
-            setPlanList(result);
+            setPlanList(o);
           }
         })
         .catch((err) => {

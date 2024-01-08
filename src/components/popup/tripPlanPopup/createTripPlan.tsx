@@ -75,21 +75,18 @@ const CreateTripPlan = ({
   }, [travelPlanObject, startDate, endDate]);
 
   const handleDateChange = useCallback(
-    (dates: [Date | null, Date | null]) => {
+    (dates: [Date, Date]) => {
       const [start, end] = dates;
-      console.log('info : ', start, end);
+
+      // console.log(start.getFullYear());
+
+      // const [startWeek, startMonth, startDay, startYear] = start
+      //   ?.toString()
+      //   .split(' ');
+      // const [endWeek, endMonth, endDay, endYear] = end?.toString().split(' ');
 
       setStartDate(start);
       setEndDate(end);
-
-      console.log('startDate : ', startDate);
-      console.log('endDate : ', endDate);
-
-      // setTravelPlanObject((pre) => ({
-      //   ...pre,
-      //   startDate,
-      //   endDate,
-      // }));
     },
     [startDate, endDate]
   );
