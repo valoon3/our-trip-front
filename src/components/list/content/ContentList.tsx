@@ -22,12 +22,7 @@ const ContentList = () => {
   const { contentType, bookmarks, plans } = useSelector(
     (state: RootState) => state.content
   );
-
-  const [planTitle, setPlanTitle] = useState<string>('');
   const [planList, setPlanList] = useState<TravelPlanI[]>([]);
-  const planTitleHandler = useCallback((e: any) => {
-    setPlanTitle(e.target.value);
-  }, []);
 
   const contents = useMemo(() => {
     if (contentType === 'bookmark') return bookmarks;
@@ -133,14 +128,8 @@ const ContentList = () => {
                 )}
                 <ContentPlanListDetail contentList={planList} />
               </div>
-              // <CreateTripPlan
-              //   isPopupOpen={isClicked}
-              //   setIsPopupOpen={setIsClicked}
-              // />
             )}
             <br />
-            {/* 여기에 새로운 일정 카운터 추가*/}
-            {planTitle}
           </div>
         </div>
       ) : (

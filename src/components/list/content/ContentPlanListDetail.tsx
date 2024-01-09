@@ -1,6 +1,6 @@
 import { Select, SelectProps } from 'antd';
 import { TravelPlanI } from '@/types/TravelPlan.type';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import PlanDetailRender from '@/components/list/content/PlanDetailRender';
 
 interface Props {
@@ -8,14 +8,17 @@ interface Props {
 }
 
 const ContentPlanListDetail = ({ contentList }: Props) => {
-  const [selectedTravelPlan, setSelectedTravelPlan] = useState<TravelPlanI>();
+  const [selectedTravelPlan, setSelectedTravelPlan] =
+    useState<TravelPlanI | null>(null);
 
-  const handleSelectBoxChange = (title: string, options: any) => {
-    console.log(title, 'options : ', options);
-    const plan = contentList[options.index];
-    setSelectedTravelPlan(plan);
-    console.log(plan.startDate?.getDate());
-  };
+  const handleSelectBoxChange = useCallback(
+    (title: string, options: any) => {
+      console.log(title, 'options : ', options);
+      const plan = contentList[options.index];
+      setSelectedTravelPlan(plan);
+    },
+    [contentList]
+  );
 
   const options: SelectProps<{ value: string }>['options'] = contentList.map(
     (content, index) => ({
@@ -27,14 +30,6 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
 
   return (
     <div>
-      {/*{contentList.map((content, index) => (*/}
-      {/*  <div key={index}>*/}
-      {/*    <div>{content.title}</div>*/}
-      {/*    <div>{content.description}</div>*/}
-      {/*    <div>{content.startDate}</div>*/}
-      {/*    <div>{content.endDate}</div>*/}
-      {/*  </div>*/}
-      {/*))}*/}
       <div style={{ marginTop: '15px' }}>
         <Select
           style={{ width: '100%' }}
@@ -42,10 +37,9 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
           onChange={handleSelectBoxChange}
           optionLabelProp="label"
           options={options}
-          // style={{ marginTop: '10px' }}
         />
       </div>
-      <div className="planDetail">
+      <div>
         {selectedTravelPlan && (
           <PlanDetailRender selectedTravelPlan={selectedTravelPlan} />
         )}
