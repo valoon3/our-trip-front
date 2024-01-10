@@ -8,8 +8,7 @@ interface Props {
 }
 
 const ContentPlanListDetail = ({ contentList }: Props) => {
-  const [selectedTravelPlan, setSelectedTravelPlan] =
-    useState<TravelPlanI | null>(null);
+  const [selectedTravelPlan, setSelectedTravelPlan] = useState<TravelPlanI>();
 
   const handleSelectBoxChange = useCallback(
     (title: string, options: any) => {
