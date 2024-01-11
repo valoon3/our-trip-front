@@ -1,11 +1,12 @@
 import styled from '@/styles/rightSideContent.module.scss';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BsStar, BsStarFill } from 'react-icons/bs';
 import { HiChevronDoubleDown } from 'react-icons/hi';
 import { SearchService } from '@/components/header/searchService';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
+import SelectTripPlan from '@/components/popup/tripPlanPopup/selectTripPlan';
 
 type Props = {
   key: number;
@@ -19,18 +20,10 @@ const START_SIZE = '22';
 
 const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   const [bookMarkStar, setBookMarkStar] = useState(false);
+  const [selectTripPopupOpen, setSelectTripPopupOpen] =
+    useState<boolean>(false);
   const searchService = new SearchService();
   const userToggle = useSelector((state: RootState) => state.user.loginToggle);
-
-  // TODO: 이거 수정하자
-  useEffect(() => {
-    if (contentType === 'search' && userToggle) {
-      console.log('/trip/bookmark/' + placeResult.place_id);
-      axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
-        setBookMarkStar(res.data);
-      });
-    }
-  }, [userToggle, contentType, placeResult]);
 
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
@@ -51,10 +44,25 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
       searchService.findPlaceDetail(placeResult.place_id);
   }, []);
 
-  const addPlanHandler = useCallback(async () => {
-    const res = await axios.post('/plan/', placeResult);
-    console.log(res);
-  }, [placeResult]);
+  const addPlanHandler = async () => {
+    await axios
+      .get('/plan' /*placeResult*/)
+      .then((res) => {
+        console.log(res.data);
+        setSelectTripPopupOpen(true);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  // TODO: 이거 수정하자
+  useEffect(() => {
+    if (contentType === 'search' && userToggle) {
+      console.log('/trip/bookmark/' + placeResult.place_id);
+      axios.get('/trip/bookmark/' + placeResult.place_id).then((res) => {
+        setBookMarkStar(res.data);
+      });
+    }
+  }, [userToggle, contentType, placeResult]);
 
   return (
     <div className={styled.searchContent}>
@@ -85,8 +93,14 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
           style={{ cursor: 'pointer' }}
         />
         {contentType !== 'plan' && (
-          <div onClick={addPlanHandler} style={{ cursor: 'pointer' }}>
-            일정 추가
+          <div>
+            <div onClick={addPlanHandler} style={{ cursor: 'pointer' }}>
+              일정 추가
+            </div>
+            <SelectTripPlan
+              selectTripPopupOpen={selectTripPopupOpen}
+              setSelectTripPopupOpen={setSelectTripPopupOpen}
+            />
           </div>
         )}
       </div>

@@ -38,10 +38,16 @@ const Content = ({ placeResult }: Props) => {
     setBookmarkStar(!bookMarkStar);
   }, [bookMarkStar, placeResult, user.loginToggle]);
 
+  // 일정 추가 핸들러
   const addPlanHandler = useCallback(async () => {
     if (contentType !== 'plan') {
       // plan 추가
-      await axios.post('/plan', placeResult);
+      await axios
+        .get('/plan' /*placeResult*/)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.error(err));
     } else {
       // plan 삭제
       //

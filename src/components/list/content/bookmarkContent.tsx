@@ -39,9 +39,12 @@ const BookmarkContent = ({ placeResult, userCheck, contentType }: Props) => {
 
   const addPlanHandler = useCallback(async () => {
     console.log(placeResult);
-    axios.post('/plan', placeResult).then((res) => {
-      console.log(res);
-    });
+    axios
+      .get('/plan' /*placeResult*/)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
   }, [placeResult]);
 
   useEffect(() => {
