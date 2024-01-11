@@ -21,28 +21,21 @@ const PlanDetailRender = ({ selectedTravelPlan }: Props) => {
     ),
   ];
 
-  console.log(startDate, endDate);
-
-  const getDatesStartToLast = (startDate: Date, endDate: Date) => {
+  const getDatesStartToLast = (startDate: Date, endDate: Date): string[][] => {
     const result = [];
-    console.log(startDate, endDate);
     while (startDate <= endDate) {
-      // console.log('testasdf : ', startDate.toISOString().split('T')[0]);
-      result.push(startDate.toISOString().split('T')[0]);
+      console.log(
+        'testasdf : ',
+        startDate.toISOString().split('T')[0].split('-')
+      );
+      result.push(startDate.toISOString().split('T')[0].split('-'));
       startDate.setDate(startDate.getDate() + 1);
     }
     console.log('result : ', result);
     return result;
   };
 
-  // const dates = useMemo<string[]>(
-  //   () => getDatesStartToLast(startDate, endDate),
-  //   [endDate, startDate]
-  // );
-
   const dates = getDatesStartToLast(startDate, endDate);
-
-  console.log('datesdates : ', dates);
 
   // useEffect(() => {
   //   console.log('dates : ', dates);
@@ -51,16 +44,14 @@ const PlanDetailRender = ({ selectedTravelPlan }: Props) => {
   // if (startDate && endDate) {
   return (
     <div>
-      {dates.map((date, index) => (
-        <div key={index}>{date}</div>
+      {dates.map(([year, month, day], index) => (
+        <div key={index} style={{ marginTop: '10px' }}>
+          <hr />
+          {month}.{day}
+        </div>
       ))}
-      <div>여행 시작 날짜 : {startDate.toString()}</div>
-      <div>여행 종료 날짜 : {endDate.toString()}</div>
     </div>
   );
-  // } else {
-  //   return <div></div>;
-  // }
 };
 
 export default PlanDetailRender;
