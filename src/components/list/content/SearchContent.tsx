@@ -25,6 +25,8 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   const searchService = new SearchService();
   const userToggle = useSelector((state: RootState) => state.user.loginToggle);
 
+  const [planList, setPlanList] = useState<any[]>([]);
+
   const bookMarkStarHandler = useCallback(async () => {
     if (!userCheck()) {
       return alert('로그인 후 이용해주세요.');
@@ -45,10 +47,15 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
   }, []);
 
   const addPlanHandler = async () => {
+    if (!userCheck()) {
+      return alert('로그인 후 이용해주세요.');
+    }
+
     await axios
-      .get('/plan' /*placeResult*/)
+      .get('/plan')
       .then((res) => {
         console.log(res.data);
+        setPlanList(res.data);
         setSelectTripPopupOpen(true);
       })
       .catch((err) => console.error(err));
@@ -100,6 +107,8 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
             <SelectTripPlan
               selectTripPopupOpen={selectTripPopupOpen}
               setSelectTripPopupOpen={setSelectTripPopupOpen}
+              placeInfo={placeResult}
+              planList={planList}
             />
           </div>
         )}

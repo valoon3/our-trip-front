@@ -41,9 +41,6 @@ const CreateTripPlan = ({
   );
 
   const handleSaveButtonClick = useCallback(() => {
-    // 여기에서 travelData를 서버에 전달하면 됩니다.
-    // 이 부분은 실제 백엔드 통신 코드로 교체되어야 합니다.
-
     if (travelPlanObject.title === '') {
       alert('여행 제목을 입력해주세요');
       return;
