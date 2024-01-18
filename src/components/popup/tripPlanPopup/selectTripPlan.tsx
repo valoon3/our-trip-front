@@ -1,5 +1,6 @@
 import { Select, SelectProps } from 'antd';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import axios from 'axios';
 
 interface Prop {
   selectTripPopupOpen: boolean;
@@ -18,11 +19,35 @@ const SelectTripPlan = ({
     setSelectTripPopupOpen(false);
   };
 
-  console.log(planList);
+  const [selectedTravelPlan, setSelectedTravelPlan] = useState<{
+    startDate: String;
+    endDate: String;
+  }>();
 
-  const [selectedTravelPlan, setSelectedTravelPlan] = useState();
+  const getDatesStartToLast = (
+    startDateString: String,
+    endDateString: String
+  ): string[][] => {
+    // console.log(startDate, '<-');
+    const dateStringToDates = (dateString: String) => {
+      const [year, month, day] = dateString.split('-');
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    };
 
-  const options: SelectProps<{ value: string }>['options'] = planList.map(
+    const startDate = dateStringToDates(startDateString);
+    const endDate = dateStringToDates(endDateString);
+
+    const result = [];
+    while (startDate <= endDate) {
+      console.log(startDate.toString());
+      const [week, month, day, year] = startDate.toString().split(' ');
+      result.push([year, month, day, week]);
+      startDate.setDate(startDate.getDate() + 1);
+    }
+    return result;
+  };
+
+  const planOptions: SelectProps<{ value: string }>['options'] = planList.map(
     (content, index) => ({
       value: content.title,
       label: content.description,
@@ -30,22 +55,36 @@ const SelectTripPlan = ({
     })
   );
 
+  const planDateOptions = useMemo(() => {
+    if (!selectedTravelPlan) return [];
+
+    const result = getDatesStartToLast(
+      selectedTravelPlan.startDate,
+      selectedTravelPlan.endDate
+    );
+
+    console.log('result : ', result);
+    return [];
+  }, [selectedTravelPlan]);
+
   const handleSelectBoxChange = useCallback(
     (title: string, options: any) => {
       console.log(title, 'options : ', options);
       const plan = planList[options.index];
+      console.log('selectedPlan : ', plan);
       setSelectedTravelPlan(plan);
     },
     [planList]
   );
 
-  const handleSaveButtonClick = useCallback(() => {
+  const handleSaveButtonClick = useCallback(async () => {
     const data = {
       selectedPlan: selectedTravelPlan,
       placeResult: placeInfo,
     };
-    // axios
-  }, []);
+
+    await axios.post('/plan/detail', data);
+  }, [selectedTravelPlan]);
 
   console.log(placeInfo, planList);
 
@@ -61,12 +100,33 @@ const SelectTripPlan = ({
           <label className="input-label" htmlFor="travelTitle">
             {placeInfo.name}
           </label>
-          <Select
-            defaultValue={'추가될 일정을 선택해주세요.'}
-            onChange={handleSelectBoxChange}
-            optionLabelProp="label"
-            options={options}
-          />
+          <div>
+            <Select
+              defaultValue={'추가될 일정을 선택해주세요.'}
+              onChange={handleSelectBoxChange}
+              optionLabelProp="label"
+              options={planOptions}
+              style={{ width: '70%' }}
+            />
+            {!selectedTravelPlan ? (
+              <Select
+                disabled={true}
+                defaultValue={'날짜를 선택해주세요.'}
+                onChange={handleSelectBoxChange}
+                optionLabelProp="label"
+                options={planDateOptions}
+                style={{ width: '30%' }}
+              />
+            ) : (
+              <Select
+                defaultValue={'날짜를 선택해주세요.'}
+                onChange={handleSelectBoxChange}
+                optionLabelProp="label"
+                options={planDateOptions}
+                style={{ width: '30%' }}
+              />
+            )}
+          </div>
           <label className="input-label" htmlFor="travelTitle">
             {placeInfo.formatted_address}
           </label>
