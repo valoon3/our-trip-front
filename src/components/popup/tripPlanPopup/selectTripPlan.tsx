@@ -20,18 +20,17 @@ const SelectTripPlan = ({
   };
 
   const [selectedTravelPlan, setSelectedTravelPlan] = useState<{
-    startDate: String;
-    endDate: String;
+    startDate: Date;
+    endDate: Date;
   }>();
 
   const getDatesStartToLast = (
-    startDateString: String,
-    endDateString: String
+    startDateString: Date,
+    endDateString: Date
   ): string[][] => {
     // console.log(startDate, '<-');
-    const dateStringToDates = (dateString: String) => {
-      const [year, month, day] = dateString.split('-');
-      return new Date(Number(year), Number(month) - 1, Number(day));
+    const dateStringToDates = (date: Date) => {
+      return new Date(date.toISOString());
     };
 
     const startDate = dateStringToDates(startDateString);
@@ -39,7 +38,6 @@ const SelectTripPlan = ({
 
     const result = [];
     while (startDate <= endDate) {
-      console.log(startDate.toString());
       const [week, month, day, year] = startDate.toString().split(' ');
       result.push([year, month, day, week]);
       startDate.setDate(startDate.getDate() + 1);

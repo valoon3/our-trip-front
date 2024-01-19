@@ -55,7 +55,17 @@ const SearchContent = ({ placeResult, userCheck, contentType }: Props) => {
       .get('/plan')
       .then((res) => {
         console.log(res.data);
-        setPlanList(res.data);
+        const planArr = res.data;
+        const planArrSet = planArr.map((plan: any) => ({
+          title: plan.title,
+          description: plan.description,
+          startDate: new Date(plan.startDate),
+          endDate: new Date(plan.endDate),
+          createdAt: new Date(plan.createdAt),
+          updatedAt: new Date(plan.updatedAt),
+          planDetail: plan.planDetail,
+        }));
+        setPlanList(planArrSet);
         setSelectTripPopupOpen(true);
       })
       .catch((err) => console.error(err));

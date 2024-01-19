@@ -50,15 +50,17 @@ const ContentList = () => {
         .get('/plan')
         .then((res) => {
           if (res.data) {
-            const result = res.data;
-            const o: TravelPlanI[] = result.map((plan: TravelPlanI) => {
-              plan.startDate =
-                plan.startDate && new Date(plan.startDate.toString());
-              plan.endDate = plan.endDate && new Date(plan.endDate.toString());
-              return plan;
-            });
-            console.log(result);
-            setPlanList(o);
+            const planArr = res.data;
+            const planArrSet = planArr.map((plan: any) => ({
+              title: plan.title,
+              description: plan.description,
+              startDate: new Date(plan.startDate),
+              endDate: new Date(plan.endDate),
+              createdAt: new Date(plan.createdAt),
+              updatedAt: new Date(plan.updatedAt),
+              planDetail: plan.planDetail,
+            }));
+            setPlanList(planArrSet);
           }
         })
         .catch((err) => {

@@ -34,7 +34,7 @@ const ContentPlanListDetail = ({ contentList }: Props) => {
           style={{ width: '100%' }}
           defaultValue={'일정을 선택해 주세요'}
           onChange={handleSelectBoxChange}
-          optionLabelProp="label"
+          optionLabelProp="value"
           options={options}
         />
       </div>
