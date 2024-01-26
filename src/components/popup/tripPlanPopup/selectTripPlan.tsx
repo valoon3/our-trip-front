@@ -59,10 +59,20 @@ const SelectTripPlan = ({
     const result = getDatesStartToLast(
       selectedTravelPlan.startDate,
       selectedTravelPlan.endDate
+    ).map(([year, month, day, week]) => {
+      return `${month}. ${day}`;
+    });
+
+    const planOptions: SelectProps<{ value: string }>['options'] = result.map(
+      (content, index) => ({
+        value: content,
+        label: content,
+        index,
+      })
     );
 
-    console.log('result : ', result);
-    return [];
+    console.log('result : ', planOptions);
+    return planOptions;
   }, [selectedTravelPlan]);
 
   const handleSelectBoxChange = useCallback(
@@ -74,6 +84,8 @@ const SelectTripPlan = ({
     },
     [planList]
   );
+
+  const handleSelectDateBoxChange = useCallback(() => {}, []);
 
   const handleSaveButtonClick = useCallback(async () => {
     const data = {
@@ -118,8 +130,9 @@ const SelectTripPlan = ({
             ) : (
               <Select
                 defaultValue={'날짜를 선택해주세요.'}
-                onChange={handleSelectBoxChange}
+                onChange={handleSelectDateBoxChange}
                 optionLabelProp="label"
+                // options={selectDate}
                 options={planDateOptions}
                 style={{ width: '30%' }}
               />
