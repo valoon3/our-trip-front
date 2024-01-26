@@ -9,6 +9,21 @@ interface Prop {
   planList: any[];
 }
 
+enum MONTH {
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'July',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+}
+
 const SelectTripPlan = ({
   selectTripPopupOpen,
   setSelectTripPopupOpen,
@@ -19,6 +34,8 @@ const SelectTripPlan = ({
     setSelectTripPopupOpen(false);
   };
 
+  const [selectedDate, setSelectedDate] = useState();
+
   const [selectedTravelPlan, setSelectedTravelPlan] = useState<{
     startDate: Date;
     endDate: Date;
@@ -27,7 +44,7 @@ const SelectTripPlan = ({
   const getDatesStartToLast = (
     startDateString: Date,
     endDateString: Date
-  ): string[][] => {
+  ): string[] => {
     // console.log(startDate, '<-');
     const dateStringToDates = (date: Date) => {
       return new Date(date.toISOString());
@@ -36,10 +53,10 @@ const SelectTripPlan = ({
     const startDate = dateStringToDates(startDateString);
     const endDate = dateStringToDates(endDateString);
 
-    const result = [];
+    const result: string[] = [];
     while (startDate <= endDate) {
-      const [week, month, day, year] = startDate.toString().split(' ');
-      result.push([year, month, day, week]);
+      const isoString: string = startDate.toISOString();
+      result.push(isoString);
       startDate.setDate(startDate.getDate() + 1);
     }
     return result;
@@ -59,8 +76,9 @@ const SelectTripPlan = ({
     const result = getDatesStartToLast(
       selectedTravelPlan.startDate,
       selectedTravelPlan.endDate
-    ).map(([year, month, day, week]) => {
-      return `${month}. ${day}`;
+    ).map((isoString) => {
+      const date = new Date(isoString);
+      return `${MONTH[date.getMonth()]}. ${date.getDate()}`;
     });
 
     const planOptions: SelectProps<{ value: string }>['options'] = result.map(
