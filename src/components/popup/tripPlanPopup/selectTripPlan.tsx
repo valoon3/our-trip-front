@@ -34,7 +34,7 @@ const SelectTripPlan = ({
     setSelectTripPopupOpen(false);
   };
 
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState<any>();
 
   const [selectedTravelPlan, setSelectedTravelPlan] = useState<{
     startDate: Date;
@@ -78,18 +78,17 @@ const SelectTripPlan = ({
       selectedTravelPlan.endDate
     ).map((isoString) => {
       const date = new Date(isoString);
-      return `${MONTH[date.getMonth()]}. ${date.getDate()}`;
+      return [isoString, `${MONTH[date.getMonth()]}. ${date.getDate()}`];
     });
 
     const planOptions: SelectProps<{ value: string }>['options'] = result.map(
       (content, index) => ({
-        value: content,
-        label: content,
+        value: content[0],
+        label: content[1],
         index,
       })
     );
 
-    console.log('result : ', planOptions);
     return planOptions;
   }, [selectedTravelPlan]);
 
@@ -103,18 +102,24 @@ const SelectTripPlan = ({
     [planList]
   );
 
-  const handleSelectDateBoxChange = useCallback(() => {}, []);
+  const handleSelectDateBoxChange = useCallback(
+    (_: any, o: any) => {
+      const date = new Date(o.value);
+      setSelectedDate(date);
+      console.log(selectedDate);
+    },
+    [selectedDate]
+  );
 
   const handleSaveButtonClick = useCallback(async () => {
     const data = {
       selectedPlan: selectedTravelPlan,
+      selectedDate,
       placeResult: placeInfo,
     };
 
     await axios.post('/plan/detail', data);
-  }, [selectedTravelPlan]);
-
-  console.log(placeInfo, planList);
+  }, [placeInfo, selectedDate, selectedTravelPlan]);
 
   const handleInSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 모달 바깥 클릭이 아니면 모달을 닫지 않음
