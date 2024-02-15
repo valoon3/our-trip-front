@@ -118,6 +118,8 @@ const SelectTripPlan = ({
       placeResult: placeInfo,
     };
 
+    console.log(data);
+
     await axios.post('/plan/detail', data);
   }, [placeInfo, selectedDate, selectedTravelPlan]);
 

@@ -13,7 +13,7 @@ interface PlaceI {
   user_ratings_total: number; // 사용자 평점 총합
 }
 
-interface PlanDetail {
+export interface PlanDetailI {
   completed: boolean; // 완료 여부
   createdAt: Date; // 생성 날짜
   id: number; // id
@@ -29,5 +29,5 @@ export interface TravelPlanI {
   endDate: Date; // 여행 시작 날짜
   createdAt?: Date | null; // 여행 시작 날짜
   updatedAt?: Date | null; // 여행 시작 날짜
-  planDetail?: PlanDetail[]; // 여행 계획
+  planDetail?: PlanDetailI[]; // 여행 계획
 }
