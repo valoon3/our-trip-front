@@ -24,6 +24,38 @@ enum MONTH {
   'Dec',
 }
 
+const HOUR = (() => {
+  const result = [];
+  for (let i = 0; i < 24; i++) {
+    result.push(i.toString().length === 1 ? '0' + i.toString() : i.toString());
+  }
+  return result;
+})();
+
+const hourOption: SelectProps<{ value: string }>['options'] = HOUR.map(
+  (hour, index) => ({
+    value: hour,
+    label: hour,
+    index,
+  })
+);
+
+const MINUTE = (() => {
+  const result = [];
+  for (let i = 0; i < 60; i++) {
+    result.push(i.toString().length === 1 ? '0' + i.toString() : i.toString());
+  }
+  return result;
+})();
+
+const minuteOption: SelectProps<{ value: string }>['options'] = MINUTE.map(
+  (minute, index) => ({
+    value: minute,
+    label: minute,
+    index,
+  })
+);
+
 const SelectTripPlan = ({
   selectTripPopupOpen,
   setSelectTripPopupOpen,
@@ -31,10 +63,20 @@ const SelectTripPlan = ({
   planList,
 }: Prop) => {
   const closePopup = () => {
+    setSelectedTravelPlan(undefined);
+    setSelectedYear('');
+    setSelectedMonth('');
+    setSelectedDate('');
+    setSelectedHour('');
+    setSelectedMinute('');
     setSelectTripPopupOpen(false);
   };
 
-  const [selectedDate, setSelectedDate] = useState<any>();
+  const [selectedYear, setSelectedYear] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedHour, setSelectedHour] = useState<string>('');
+  const [selectedMinute, setSelectedMinute] = useState<string>('');
 
   const [selectedTravelPlan, setSelectedTravelPlan] = useState<{
     startDate: Date;
@@ -78,7 +120,7 @@ const SelectTripPlan = ({
       selectedTravelPlan.endDate
     ).map((isoString) => {
       const date = new Date(isoString);
-      return [isoString, `${MONTH[date.getMonth()]}. ${date.getDate()}`];
+      return [date.toString(), `${MONTH[date.getMonth()]}. ${date.getDate()}`];
     });
 
     const planOptions: SelectProps<{ value: string }>['options'] = result.map(
@@ -98,30 +140,57 @@ const SelectTripPlan = ({
       const plan = planList[options.index];
       console.log('selectedPlan : ', plan);
       setSelectedTravelPlan(plan);
+      setSelectedDate('');
     },
     [planList]
   );
 
-  const handleSelectDateBoxChange = useCallback(
-    (_: any, o: any) => {
-      const date = new Date(o.value);
-      setSelectedDate(date);
-      console.log(selectedDate);
-    },
-    [selectedDate]
-  );
+  const handleSelectDateBoxChange = useCallback((_: any, o: any) => {
+    const date = new Date(o.value);
+    setSelectedYear(date.getFullYear().toString());
+    setSelectedMonth((date.getMonth() + 1).toString());
+    setSelectedDate(date.getDate().toString());
+  }, []);
 
   const handleSaveButtonClick = useCallback(async () => {
+    if (!selectedYear) {
+      alert('여행 일정 선택은 필수입니다.');
+      return;
+    } else if (!selectedDate) {
+      alert('방문 일자 선택은 필수입니다.');
+      return;
+    }
+
+    console.log('selectedTravelPlan : ', selectedTravelPlan);
+    console.log('selectedYear : ', selectedYear);
+    console.log('selectedMonth : ', selectedMonth);
+    console.log('selectedDate : ', selectedDate);
+    console.log('selectedHour : ', selectedHour);
+    console.log('selectedMinute : ', selectedMinute);
+
+    const newDate = new Date(
+      `${selectedYear}-${
+        selectedMonth.length === 1 ? '0' + selectedMonth : selectedMonth
+      }-${selectedDate}T${selectedHour || '00'}:${selectedMinute || '00'}:00`
+    );
+
     const data = {
       selectedPlan: selectedTravelPlan,
-      selectedDate,
+      selectedDate: newDate,
       placeResult: placeInfo,
     };
 
-    console.log(data);
-
     await axios.post('/plan/detail', data);
-  }, [placeInfo, selectedDate, selectedTravelPlan]);
+    closePopup();
+  }, [
+    selectedTravelPlan,
+    selectedYear,
+    selectedMonth,
+    selectedDate,
+    selectedHour,
+    selectedMinute,
+    placeInfo,
+  ]);
 
   const handleInSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 모달 바깥 클릭이 아니면 모달을 닫지 않음
@@ -143,25 +212,37 @@ const SelectTripPlan = ({
               options={planOptions}
               style={{ width: '70%' }}
             />
-            {!selectedTravelPlan ? (
-              <Select
-                disabled={true}
-                defaultValue={'날짜를 선택해주세요.'}
-                onChange={handleSelectBoxChange}
-                optionLabelProp="label"
-                options={planDateOptions}
-                style={{ width: '30%' }}
-              />
-            ) : (
-              <Select
-                defaultValue={'날짜를 선택해주세요.'}
-                onChange={handleSelectDateBoxChange}
-                optionLabelProp="label"
-                // options={selectDate}
-                options={planDateOptions}
-                style={{ width: '30%' }}
-              />
-            )}
+            <Select
+              defaultValue={'날짜를 선택해주세요.'}
+              disabled={selectedTravelPlan ? false : true}
+              onChange={handleSelectDateBoxChange}
+              optionLabelProp="label"
+              // options={selectDate}
+              options={planDateOptions}
+              style={{ width: '30%' }}
+            />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            {'방문 예정 시간 : '}
+            <Select
+              defaultValue={'시간을 선택해주세요.'}
+              disabled={selectedDate ? false : true}
+              onChange={(_, o: any) => {
+                setSelectedHour(o.value);
+              }}
+              options={hourOption}
+              style={{ width: '30%', textAlign: 'right' }}
+            />
+            {' : '}
+            <Select
+              defaultValue={minuteOption[0].value}
+              disabled={selectedHour ? false : true}
+              options={minuteOption}
+              onChange={(_, o: any) => {
+                setSelectedMinute(o.value);
+              }}
+              style={{ width: '30%', textAlign: 'right' }}
+            />
           </div>
           <label className="input-label" htmlFor="travelTitle">
             {placeInfo.formatted_address}
