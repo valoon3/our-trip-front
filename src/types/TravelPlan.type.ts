@@ -1,4 +1,4 @@
-interface PlaceI {
+export interface PlaceI {
   address: string; // 주소
   business_status: string; // 영업 상태
   formatted_address: string; // 포맷된 주소
@@ -11,6 +11,8 @@ interface PlaceI {
   rating: number; // 평점
   types: string[]; // 장소 타입
   user_ratings_total: number; // 사용자 평점 총합
+  time?: string; // 시간
+  name: string; // 이름
 }
 
 export interface PlanDetailI {
