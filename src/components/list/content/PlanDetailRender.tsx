@@ -111,12 +111,6 @@ const PlanDetailRender = ({ selectedTravelPlan }: Props) => {
 
   return (
     <div>
-      {/*{dates.map(([year, month, day, week], index) => (*/}
-      {/*  <div key={index} style={{ marginTop: '10px' }}>*/}
-      {/*    <hr />*/}
-      {/*    {getMonth(month)}.{day} ({week})*/}
-      {/*  </div>*/}
-      {/*))}*/}
       {planDetail?.map(([dateString, place]: [string, PlaceI[]], index) => (
         <div key={index} style={{ marginTop: '10px' }}>
           <hr />
@@ -124,7 +118,7 @@ const PlanDetailRender = ({ selectedTravelPlan }: Props) => {
           <div>
             {place.map(({ name, address, time }, index) => (
               <div key={index}>
-                <div>
+                <div onClick={() => alert(name)}>
                   {name}
                   <span style={{ textAlign: 'right' }}>{time}</span>
                 </div>

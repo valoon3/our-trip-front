@@ -41,9 +41,12 @@ const ContentList = () => {
 
   useEffect(() => {
     if (contentType === 'bookmark') {
-      axios.get('/trip/bookmarks').then((res) => {
-        dispatch(setBookmarks(res.data));
-      });
+      axios
+        .get('/trip/bookmarks')
+        .then((res) => {
+          dispatch(setBookmarks(res.data));
+        })
+        .catch((err) => console.error(err));
     } else if (contentType === 'plan') {
       // plan data 저장
       axios

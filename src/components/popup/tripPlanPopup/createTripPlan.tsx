@@ -22,11 +22,12 @@ const CreateTripPlan = ({
     setIsPopupOpen(false);
   };
 
+  // todo: 배포를 위해 임의 데이터 설정
   const [travelPlanObject, setTravelPlanObject] = useState<TravelPlanI>({
     title: '',
     description: '',
-    startDate: null, // 여행 시작 날짜
-    endDate: null, // 여행 시작 날짜
+    startDate: new Date(), // 여행 시작 날짜
+    endDate: new Date(), // 여행 시작 날짜
   });
 
   const travelObjectHandler = useCallback(

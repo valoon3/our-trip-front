@@ -1,4 +1,8 @@
 FROM node:20-alpine
+LABEL version="0.0.1"
+LABEL description="Our-Trip-Front image to understand Docker"
+
+#docker build -t front:1.0.0 -f Dockerfile_dev ./
 
 #WORKDIR /app
 WORKDIR /our-trip/our-trip-front
@@ -8,13 +12,13 @@ COPY ./package.json .
 #COPY . .
 
 RUN npm install
+# pm2 설치
 RUN npm install -g pm2
 
 COPY . .
-
-#COPY . .
 RUN npm run build
 
 #EXPOSE 80:80/tcp
 
-CMD ["npm", "run", "start:pm2"]
+#CMD ["npm", "run", "start:pm2"]
+CMD ["npm", "run", "dev"]
